@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --color-primary: #3B82F6;
+    --color-primary-soft: #DBEAFE;
+    --color-secondary: #10B981;
+    --color-secondary-soft: #D1FAE5;
+    --color-text-dark: #0F172A;
+    --color-text-gray: #64748B;
+    --color-border-light: #E2E8F0;
+    --color-background-soft: #F8FAFC;
+    --color-danger: #EF4444;
+    --color-warning: #F59E0B;
+
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-heading: 'Poppins', sans-serif;
+}
+
+@layer base {
+    body {
+        @apply bg-[var(--color-background-soft)] text-[var(--color-text-dark)] font-sans antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-heading text-[var(--color-text-dark)];
+    }
+
+    h1 {
+        @apply text-[40px] font-bold leading-tight;
+    }
+
+    h2 {
+        @apply text-[32px] font-semibold leading-tight;
+    }
+
+    h3 {
+        @apply text-[24px] font-semibold leading-snug;
+    }
+
+    h4 {
+        @apply text-[20px] font-medium leading-snug;
+    }
+}
