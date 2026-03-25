@@ -1,0 +1,1 @@
+Bienvenue sur ton PatientDashboard ! L\'inscription a réussi 🎉

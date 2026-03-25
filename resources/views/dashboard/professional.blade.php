@@ -1,0 +1,1 @@
+Bienvenue sur ton Professional Dashboard ! L\'inscription a réussi 🎉

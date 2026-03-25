@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
 
 Route::get('/', function () {
@@ -18,9 +19,7 @@ Route::get('/register', function () {
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-Route::get('/dashboard', function () {
-    return 'Bienvenue sur ton Dashboard ! L\'inscription a réussi 🎉';
-})->name('dashboard')->middleware('auth');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
 Route::get('/about', function () {
     return view('about');
