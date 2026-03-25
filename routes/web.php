@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,6 +15,12 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('auth.register');
 });
+
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+Route::get('/dashboard', function () {
+    return 'Bienvenue sur ton Dashboard ! L\'inscription a réussi 🎉';
+})->name('dashboard')->middleware('auth');
 
 Route::get('/about', function () {
     return view('about');
