@@ -9,6 +9,7 @@ use App\Models\Professional;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisteredUserRequest;
+use App\Http\Requests\LoginUserRequest;
 
 class AuthController extends Controller
 {
@@ -34,5 +35,22 @@ class AuthController extends Controller
         Auth::login($user);
 
         return redirect()->route('dashboard');
+    }
+
+    public function login(LoginUserRequest $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if(Auth::attempt($credentials)){
+            // dd($credentials);
+            $request->session()->regenerate();
+            
+            return redirect()->route('dashboard');
+
+        } else {
+            return back()->withErrors([
+                'email' => 'Invalid credentials.',
+            ]);     
+        }
     }
 }

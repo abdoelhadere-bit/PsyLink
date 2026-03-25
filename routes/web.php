@@ -13,6 +13,9 @@ Route::get('/login', function () {
     return view('auth.login');
 });
 
+Route::post ('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
 Route::get('/register', function () {
     return view('auth.register');
 });
@@ -25,7 +28,6 @@ Route::get('/about', function () {
     return view('about');
 });
 
-// Phase 3: Flow de Réservation
 Route::get('/professionals', function () {
     return view('professionals.index');
 });
@@ -33,6 +35,8 @@ Route::get('/professionals', function () {
 Route::get('/professionals/{id}', function ($id) {
     return view('professionals.show');
 });
+
+Route::post('/admin/validate/{id}', [DashboardController::class, 'validatePro'])->name('admin.validate')->middleware('auth');
 
 Route::get('/sessions/create', function () {
     return view('sessions.create');
