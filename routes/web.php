@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfessionalController;    
+use App\Http\Controllers\AppointmentController;
 
 
 Route::get('/', function () {
@@ -29,13 +30,15 @@ Route::get('/about', function () {
     return view('about');
 })->middleware('auth');  
 
-Route::get('/professionals', [ProfessionalController::class, 'index'])->name('professionals.index')->middleware('auth');
+Route::get('/professionals', [ProfessionalController::class, 'index'])->name('professionals.index');
 
-Route::get('/professionals/{id}', [ProfessionalController::class, 'show'])->name('professionals.show')->middleware('auth');
+Route::get('/professionals/{id}', [ProfessionalController::class, 'show'])->name('professionals.show');
 
 Route::post('/admin/validate/{id}', [DashboardController::class, 'validatePro'])->name('admin.validate')->middleware('auth');   
 
 Route::get('/appointments/create/{professional_id}', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('auth');
+
+Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('auth');
 
 Route::get('/checkout', function () {
     return view('checkout.index');
