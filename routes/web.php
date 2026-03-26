@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfessionalController;    
 
 
 Route::get('/', function () {
@@ -26,17 +27,13 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 Route::get('/about', function () {
     return view('about');
-});
+}); 
 
-Route::get('/professionals', function () {
-    return view('professionals.index');
-});
+Route::get('/professionals', [ProfessionalController::class, 'index'])->name('professionals.index')->middleware('auth');
 
-Route::get('/professionals/{id}', function ($id) {
-    return view('professionals.show');
-});
+Route::get('/professionals/{id}', [ProfessionalController::class, 'show'])->name('professionals.show')->middleware('auth');
 
-Route::post('/admin/validate/{id}', [DashboardController::class, 'validatePro'])->name('admin.validate')->middleware('auth');
+Route::post('/admin/validate/{id}', [DashboardController::class, 'validatePro'])->name('admin.validate')->middleware('auth');   
 
 Route::get('/sessions/create', function () {
     return view('sessions.create');

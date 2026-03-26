@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('professionals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->unique();
-            $table->string('specialty')->nullable();
+            $table->string('speciality')->nullable();
             $table->text('bio')->nullable();
             $table->boolean('is_valid')->default(false);
             $table->decimal('hourly_rate', 8, 2)->default(0);

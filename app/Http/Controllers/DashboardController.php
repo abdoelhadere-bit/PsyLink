@@ -27,6 +27,8 @@ class DashboardController extends Controller
     public function validatePro($id)
     {
         $pro = Professional::find($id);
+        if($pro->user->role !== 'admin') abort(403);
+
         $pro->is_valid = true;
         $pro->save();
         return redirect()->route('dashboard');  
