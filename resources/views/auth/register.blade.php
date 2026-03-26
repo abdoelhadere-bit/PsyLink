@@ -19,24 +19,39 @@
                 <form action="{{ route('register') }}" method="POST" class="space-y-5">
                     @csrf
                     <input type="hidden" name="role" id="role-input" value="patient">
+                    @error('role')
+                        <div class="p-3 bg-red-50 text-red-600 border border-red-200 rounded-lg text-sm mb-4">{{ $message }}</div>
+                    @enderror
                     
                     <!-- Champs Communs -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div class="col-span-1 sm:col-span-2">
                             <label class="block text-sm font-medium text-[var(--color-text-dark)] mb-1">Nom complet / Pseudo</label>
                             <x-input type="text" name="name" required class="w-full bg-gray-50/50" placeholder="Jean Dupont" />
+                            @error('name')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div class="col-span-1 sm:col-span-2">
                             <label class="block text-sm font-medium text-[var(--color-text-dark)] mb-1">Adresse Email</label>
                             <x-input type="email" name="email" required class="w-full bg-gray-50/50" placeholder="vous@exemple.com" />
+                            @error('email')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-[var(--color-text-dark)] mb-1">Mot de passe</label>
                             <x-input type="password" name="password" required class="w-full bg-gray-50/50" placeholder="••••••••" />
+                            @error('password')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-[var(--color-text-dark)] mb-1">Confirmer mot de passe</label>
                             <x-input type="password" name="password_confirmation" required class="w-full bg-gray-50/50" placeholder="••••••••" />
+                            @error('password_confirmation')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 

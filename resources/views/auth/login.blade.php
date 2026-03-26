@@ -27,6 +27,9 @@
                                 Adresse email
                             </label>
                             <x-input id="email" name="email" type="email" autocomplete="email" required class="w-full bg-white/50" placeholder="vous@exemple.com" />
+                            @error('email')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         
                         <div>
@@ -41,6 +44,9 @@
                                 </div>
                             </div>
                             <x-input id="password" name="password" type="password" autocomplete="current-password" required class="w-full bg-white/50" placeholder="••••••••" />
+                            @error('password')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 

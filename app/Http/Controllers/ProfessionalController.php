@@ -21,7 +21,7 @@ class ProfessionalController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -37,7 +37,8 @@ class ProfessionalController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $professional = Professional::with('user')->findOrFail($id);
+        return view('professionals.show', compact('professional'));
     }
 
     /**

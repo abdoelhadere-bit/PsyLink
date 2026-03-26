@@ -12,22 +12,22 @@ Route::get('/', function () {
 
 Route::get('/login', function () {
     return view('auth.login');
-});
+})->middleware('guest');
 
-Route::post ('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::post ('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::get('/register', function () {
     return view('auth.register');
-});
+})->middleware('guest');
 
-Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register')->middleware('guest');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
 Route::get('/about', function () {
     return view('about');
-}); 
+})->middleware('auth');  
 
 Route::get('/professionals', [ProfessionalController::class, 'index'])->name('professionals.index')->middleware('auth');
 
@@ -35,9 +35,7 @@ Route::get('/professionals/{id}', [ProfessionalController::class, 'show'])->name
 
 Route::post('/admin/validate/{id}', [DashboardController::class, 'validatePro'])->name('admin.validate')->middleware('auth');   
 
-Route::get('/sessions/create', function () {
-    return view('sessions.create');
-});
+Route::get('/appointments/create/{professional_id}', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('auth');
 
 Route::get('/checkout', function () {
     return view('checkout.index');
