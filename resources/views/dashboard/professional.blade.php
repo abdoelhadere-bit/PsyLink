@@ -23,25 +23,25 @@
                                         @if($appointment->status === 'pending')
                                             <form method="POST" action="{{ route('appointments.accept', $appointment->id) }}">
                                                 @csrf
-                                                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Accepter</button>
+                                                <button type="submit" class="px-4 py-2 bg-green-500 text-black rounded hover:bg-green-600">Accepter</button>
                                             </form>
                                             <form method="POST" action="{{ route('appointments.reject', $appointment->id) }}">
                                                 @csrf
-                                                <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Refuser</button>
+                                                <button type="submit" class="px-4 py-2 bg-red-500 text-black rounded hover:bg-red-600">Refuser</button>
                                             </form>
                                         @endif
                                         
                                         @if($appointment->status === 'accepted' || $appointment->status === 'waiting_payment')
                                             <form method="POST" action="{{ route('appointments.start', $appointment->id) }}">
                                                 @csrf
-                                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Commencer</button>
+                                                <button type="submit" class="px-4 py-2 bg-blue-500 text-black rounded hover:bg-blue-600">Commencer</button>
                                             </form>
                                         @endif
                                         
                                         @if($appointment->status === 'in_progress')
                                             <form method="POST" action="{{ route('appointments.complete', $appointment->id) }}">
                                                 @csrf
-                                                <button type="submit" class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">Terminer</button>
+                                                <button type="submit" class="px-4 py-2 bg-purple-500 text-black rounded hover:bg-purple-600">Terminer</button>
                                             </form>
                                         @endif
                                     </div>

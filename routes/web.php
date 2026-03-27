@@ -36,9 +36,17 @@ Route::get('/professionals/{id}', [ProfessionalController::class, 'show'])->name
 
 Route::post('/admin/validate/{id}', [DashboardController::class, 'validatePro'])->name('admin.validate')->middleware('auth');   
 
+
+
 Route::get('/appointments/create/{professional_id}', [AppointmentController::class, 'create'])->name('appointments.create')->middleware('auth');
 
 Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store')->middleware('auth');
+
+Route::post('/appointments/{appointment}/accept', [AppointmentController::class, 'accept'])->name('appointments.accept')->middleware('auth');
+Route::post('/appointments/{appointment}/reject', [AppointmentController::class, 'reject'])->name('appointments.reject')->middleware('auth');
+Route::post('/appointments/{appointment}/start', [AppointmentController::class, 'start'])->name('appointments.start')->middleware('auth');
+Route::post('/appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete')->middleware('auth');
+
 
 Route::get('/checkout', function () {
     return view('checkout.index');

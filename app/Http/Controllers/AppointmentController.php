@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Professional;
 use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
+use Illuminate\Support\Facades\Gate;
 
 class AppointmentController extends Controller
 {
+
+    
     public function create($professional_id)
     {
         $professional = Professional::with('user')->findOrFail($professional_id);
@@ -30,9 +33,37 @@ class AppointmentController extends Controller
             'duration_minutes' => 45,
             'type' => $validated['type'],
             'price' => $professional->hourly_rate,
-            'status' => 'en_attente',
+            'status' => 'pending',
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Votre demande de rendez-vous a bien été envoyée au praticien.');
+    }
+
+    public function accept(Appointment $appointment)
+    {
+        Gate::authorize('accept', $appointment);
+        $appointment->update(['status' => 'accepted']);
+        return redirect()->route('dashboard')->with('success', 'Rendez-vous accepté.');
+    }
+
+    public function reject(Appointment $appointment)
+    {
+        Gate::authorize('reject', $appointment);
+        $appointment->update(['status' => 'rejected']);
+        return redirect()->route('dashboard')->with('success', 'Rendez-vous refusé.');
+    }
+
+    public function start(Appointment $appointment)
+    {
+        Gate::authorize('start', $appointment);
+        $appointment->update(['status' => 'in_progress']);
+        return redirect()->route('dashboard')->with('success', 'Rendez-vous commencé.');
+    }
+
+    public function complete(Appointment $appointment)
+    {
+        Gate::authorize('complete', $appointment);
+        $appointment->update(['status' => 'completed']);
+        return redirect()->route('dashboard')->with('success', 'Rendez-vous terminé.');
     }
 }
