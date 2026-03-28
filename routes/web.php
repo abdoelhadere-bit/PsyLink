@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfessionalController;    
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\CheckoutController;
 
 
 Route::get('/', function () {
@@ -47,7 +48,8 @@ Route::post('/appointments/{appointment}/reject', [AppointmentController::class,
 Route::post('/appointments/{appointment}/start', [AppointmentController::class, 'start'])->name('appointments.start')->middleware('auth');
 Route::post('/appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete')->middleware('auth');
 
+Route::get('/appointments/{appointment}/room', [AppointmentController::class, 'room'])->name('appointments.room')->middleware('auth');
 
-Route::get('/checkout', function () {
-    return view('checkout.index');
-});
+
+Route::get('/checkout/{appointment}', [CheckoutController::class, 'show'])->name('checkout.show')->middleware('auth');
+Route::post('/checkout/{appointment}', [CheckoutController::class, 'process'])->name('checkout.process')->middleware('auth');

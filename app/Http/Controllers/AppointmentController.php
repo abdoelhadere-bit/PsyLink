@@ -42,8 +42,14 @@ class AppointmentController extends Controller
     public function accept(Appointment $appointment)
     {
         Gate::authorize('accept', $appointment);
-        $appointment->update(['status' => 'accepted']);
-        return redirect()->route('dashboard')->with('success', 'Rendez-vous accepté.');
+        
+        if ($appointment->price > 0) {
+            $appointment->update(['status' => 'waiting_payment']);
+            return redirect()->route('dashboard')->with('success', 'Rendez-vous accepté. En attente du paiement du patient.');
+        } else {
+            $appointment->update(['status' => 'paid']);
+            return redirect()->route('dashboard')->with('success', 'Rendez-vous gratuit accepté. Vous pouvez le commencer à tout moment.');
+        }
     }
 
     public function reject(Appointment $appointment)
@@ -56,8 +62,13 @@ class AppointmentController extends Controller
     public function start(Appointment $appointment)
     {
         Gate::authorize('start', $appointment);
+        
+        if($appointment->status !== 'paid') {
+            return redirect()->route('dashboard')->with('error', 'Vous ne pouvez pas commencer une séance non payée.');
+        }
+
         $appointment->update(['status' => 'in_progress']);
-        return redirect()->route('dashboard')->with('success', 'Rendez-vous commencé.');
+        return redirect()->route('appointments.room', $appointment->id);
     }
 
     public function complete(Appointment $appointment)
@@ -65,5 +76,22 @@ class AppointmentController extends Controller
         Gate::authorize('complete', $appointment);
         $appointment->update(['status' => 'completed']);
         return redirect()->route('dashboard')->with('success', 'Rendez-vous terminé.');
+    }
+
+    public function room(Appointment $appointment)
+    {
+        if ($appointment->status !== 'in_progress' && $appointment->status !== 'paid') {
+            return redirect()->route('dashboard')->with('error', 'La salle de consultation n\'est pas ouverte (Séance non payée ou terminée).');
+        }
+
+        $user = auth()->user();
+        if ($user->role === 'patient' && ($user->patient === null || $user->patient->id !== $appointment->patient_id)) {
+            abort(403, 'Accès refusé à cette salle.');
+        }
+        if ($user->role === 'professional' && ($user->professional === null || $user->professional->id !== $appointment->professional_id)) {
+            abort(403, 'Accès refusé à cette salle.');
+        }
+
+        return view('appointments.room', compact('appointment'));
     }
 }
