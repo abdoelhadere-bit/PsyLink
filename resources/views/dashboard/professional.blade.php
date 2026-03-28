@@ -31,10 +31,12 @@
                                             </form>
                                         @endif
                                         
-                                        @if($appointment->status === 'accepted' || $appointment->status === 'waiting_payment')
+                                        @if($appointment->status === 'waiting_payment')
+                                            <button disabled class="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed border border-gray-200">En attente de paiement ⌛</button>
+                                        @elseif($appointment->status === 'paid' || $appointment->status === 'accepted')
                                             <form method="POST" action="{{ route('appointments.start', $appointment->id) }}">
                                                 @csrf
-                                                <button type="submit" class="px-4 py-2 bg-blue-500 text-black rounded hover:bg-blue-600">Commencer</button>
+                                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 font-bold shadow-md">Commencer la séance 🎥</button>
                                             </form>
                                         @endif
                                         

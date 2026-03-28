@@ -79,11 +79,15 @@
                                     </div>
                                     
                                     <div class="flex flex-row items-center w-full sm:w-auto justify-between sm:justify-end border-t sm:border-0 pt-4 sm:pt-0 border-gray-100 gap-6">
-                                        <div class="text-right flex flex-col items-end">
-                                            @if($appointment->status === 'pending')
+                                        <div class="text-right flex flex-col items-end gap-2">
+                                            @if($appointment->status === 'in_progress')
+                                                <a href="{{ route('appointments.room', $appointment->id) }}" class="px-4 py-1.5 rounded-full text-xs uppercase tracking-wide font-bold bg-blue-500 text-white shadow-md hover:bg-blue-600 transition-colors animate-pulse">Rejoindre la visio 🎥</a>
+                                            @elseif($appointment->status === 'pending')
                                                 <span class="px-3 py-1 rounded-full text-[11px] uppercase tracking-wide font-bold bg-yellow-100 text-yellow-700 shadow-sm border border-yellow-200/50">En attente</span>
-                                            @elseif($appointment->status === 'accepted')
-                                                <span class="px-3 py-1 rounded-full text-[11px] uppercase tracking-wide font-bold bg-green-100 text-green-700 shadow-sm border border-green-200/50">Confirmé</span>
+                                            @elseif($appointment->status === 'waiting_payment')
+                                                <a href="{{ route('checkout.show', $appointment->id) }}" class="px-4 py-1.5 rounded-full text-xs uppercase tracking-wide font-bold bg-amber-500 text-white shadow-md hover:bg-amber-600 transition-colors">💳 Payer {{ $appointment->price }}€</a>
+                                            @elseif($appointment->status === 'paid' || $appointment->status === 'accepted')
+                                                <span class="px-3 py-1 rounded-full text-[11px] uppercase tracking-wide font-bold bg-green-100 text-green-700 shadow-sm border border-green-200/50">✔️ Confirmé & Payé</span>
                                             @elseif($appointment->status === 'rejected' || $appointment->status === 'cancelled')
                                                 <span class="px-3 py-1 rounded-full text-[11px] uppercase tracking-wide font-bold bg-red-100 text-red-700 shadow-sm border border-red-200/50">Refusé/Annulé</span>
                                             @else
