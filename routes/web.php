@@ -36,7 +36,8 @@ Route::get('/professionals', [ProfessionalController::class, 'index'])->name('pr
 
 Route::get('/professionals/{id}', [ProfessionalController::class, 'show'])->name('professionals.show');
 
-Route::post('/admin/validate/{id}', [DashboardController::class, 'validatePro'])->name('admin.validate')->middleware('auth');   
+// -- Administration --
+Route::post('/admin/pro/{id}/toggle-status', [DashboardController::class, 'toggleProStatus'])->name('admin.toggle_status')->middleware('auth');   
 
 
 // -- Profil du Professionnel --

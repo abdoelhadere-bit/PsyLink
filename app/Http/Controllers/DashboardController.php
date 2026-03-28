@@ -28,21 +28,30 @@ class DashboardController extends Controller
             }
 
         } else if (auth()->user()->role === 'admin') {
+            // Statistiques globales
+            $totalPatients = User::where('role', 'patient')->count();
+            $totalPros = Professional::where('is_valid', true)->count();
+            $totalAppointments = Appointment::whereNotIn('status', ['pending', 'rejected', 'cancelled'])->count();
 
-            $nonValidPros = Professional::where('is_valid', false)->with('user')->get();
-            return view('dashboard.admin', compact('nonValidPros'));
+            // Listes de modération
+            $pendingPros = Professional::where('is_valid', false)->with('user')->get();
+            $activePros = Professional::where('is_valid', true)->with('user')->get();
+
+            return view('dashboard.admin', compact('totalPatients', 'totalPros', 'totalAppointments', 'pendingPros', 'activePros'));
         } else {
             return view('welcome');
         }
     }
 
-    public function validatePro($id)
+    public function toggleProStatus($id)
     {
-        $pro = Professional::find($id);
         Gate::authorize('admin');
+        $pro = Professional::findOrFail($id);
 
-        $pro->is_valid = true;
+        $pro->is_valid = !$pro->is_valid;
         $pro->save();
-        return redirect()->route('dashboard');  
+        
+        $action = $pro->is_valid ? 'validé et autorisé' : 'suspendu et bloqué';
+        return redirect()->route('dashboard')->with('success', "Le compte du praticien a été $action avec succès.");
     }
 }
