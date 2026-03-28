@@ -33,10 +33,14 @@ class CheckoutController extends Controller
             abort(403);
         }
         $request->validate([
-            'card_name' => 'required|string|max:255',
-            'card_number' => 'required|string|min:16|max:19',
-            'exp_date' => 'required|string',
-            'cvc' => 'required|string|min:3',
+            'card_name' => ['required', 'string', 'max:255'],
+            'card_number' => ['required', 'string', 'regex:/^[\d\s]{16,19}$/'],
+            'exp_date' => ['required', 'string', 'regex:/^(0[1-9]|1[0-2])\/[0-9]{2}$/'],
+            'cvc' => ['required', 'string', 'regex:/^[0-9]{3,4}$/'],
+        ], [
+            'exp_date.regex' => 'La date d\'expiration doit être au format MM/YY (ex: 12/26)',
+            'card_number.regex' => 'Numéro de carte invalide.',
+            'cvc.regex' => 'Cryptogramme invalide.',
         ]);
         Payment::create([
             'appointment_id' => $appointment->id,

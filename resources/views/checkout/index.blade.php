@@ -35,7 +35,10 @@
                     <div>
                         <label for="card_name" class="block text-sm font-medium text-gray-700">Nom sur la carte</label>
                         <div class="mt-1">
-                            <input id="card_name" name="card_name" type="text" required value="{{ auth()->user()->name }}" class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors">
+                            <input id="card_name" name="card_name" type="text" required value="{{ old('card_name', auth()->user()->name) }}" class="appearance-none block w-full px-4 py-3 border @error('card_name') border-red-300 ring-1 ring-red-500 @else border-gray-300 @enderror rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors">
+                            @error('card_name')
+                                <p class="mt-2 text-sm text-red-600 font-medium flex items-center"><svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> {{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -45,26 +48,35 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                             </div>
-                            <input id="card_number" name="card_number" type="text" required placeholder="0000 0000 0000 0000" class="pl-10 appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm font-mono tracking-widest transition-colors">
+                            <input id="card_number" name="card_number" type="text" required value="{{ old('card_number') }}" placeholder="0000 0000 0000 0000" class="pl-10 appearance-none block w-full px-4 py-3 border @error('card_number') border-red-300 ring-1 ring-red-500 @else border-gray-300 @enderror rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm font-mono tracking-widest transition-colors">
                         </div>
+                        @error('card_number')
+                            <p class="mt-2 text-sm text-red-600 font-medium flex items-center"><svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> {{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="exp_date" class="block text-sm font-medium text-gray-700">Expiration</label>
                             <div class="mt-1">
-                                <input id="exp_date" name="exp_date" type="text" required placeholder="MM/AA" class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm font-mono transition-colors">
+                                <input id="exp_date" name="exp_date" type="text" required value="{{ old('exp_date') }}" placeholder="MM/AA" class="appearance-none block w-full px-4 py-3 border @error('exp_date') border-red-300 ring-1 ring-red-500 @else border-gray-300 @enderror rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm font-mono transition-colors">
+                                @error('exp_date')
+                                    <p class="mt-2 text-xs text-red-600 font-medium">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
                         <div>
                             <label for="cvc" class="block text-sm font-medium text-gray-700">CVC</label>
                             <div class="mt-1 relative rounded-md shadow-sm">
-                                <input id="cvc" name="cvc" type="text" required placeholder="123" class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm font-mono transition-colors">
+                                <input id="cvc" name="cvc" type="text" required value="{{ old('cvc') }}" placeholder="123" class="appearance-none block w-full px-4 py-3 border @error('cvc') border-red-300 ring-1 ring-red-500 @else border-gray-300 @enderror rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm font-mono transition-colors">
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                     <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v-2H2v-4h4.257a6 6 0 1111.743-1.743zM8 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
                                 </div>
                             </div>
+                            @error('cvc')
+                                <p class="mt-2 text-xs text-red-600 font-medium">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 

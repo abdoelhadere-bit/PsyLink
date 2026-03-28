@@ -3,7 +3,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h2 class="text-2xl font-bold mb-6">Mes Rendez-vous</h2>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">Mes Rendez-vous</h2>
+                        <a href="{{ route('professional.profile.edit') }}" class="px-4 py-2 bg-gray-800 text-white text-sm font-semibold rounded-lg hover:bg-gray-700 shadow flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                            Modifier mon profil
+                        </a>
+                    </div>
                     
                     @if($appointments->isEmpty())
                         <p class="text-gray-500">Vous n'avez aucun rendez-vous pour le moment.</p>
@@ -34,17 +40,29 @@
                                         @if($appointment->status === 'waiting_payment')
                                             <button disabled class="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed border border-gray-200">En attente de paiement ⌛</button>
                                         @elseif($appointment->status === 'paid' || $appointment->status === 'accepted')
-                                            <form method="POST" action="{{ route('appointments.start', $appointment->id) }}">
-                                                @csrf
-                                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 font-bold shadow-md">Commencer la séance 🎥</button>
-                                            </form>
+                                            @php
+                                                $scheduledAt = \Carbon\Carbon::parse($appointment->scheduled_at);
+                                                $allowedStartTime = $scheduledAt->copy()->subMinutes(15);
+                                            @endphp
+                                            
+                                            @if(now()->isBefore($allowedStartTime))
+                                                <button disabled class="px-4 py-2 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed border border-gray-300 shadow-sm" title="Disponible 15min avant l'heure">À venir ({{ $scheduledAt->format('H:i') }}) 🕒</button>
+                                            @else
+                                                <form method="POST" action="{{ route('appointments.start', $appointment->id) }}">
+                                                    @csrf
+                                                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 font-bold shadow-md animate-pulse">Lancer la séance 🎥</button>
+                                                </form>
+                                            @endif
                                         @endif
                                         
                                         @if($appointment->status === 'in_progress')
-                                            <form method="POST" action="{{ route('appointments.complete', $appointment->id) }}">
-                                                @csrf
-                                                <button type="submit" class="px-4 py-2 bg-purple-500 text-black rounded hover:bg-purple-600">Terminer</button>
-                                            </form>
+                                            <div class="flex space-x-2">
+                                                <a href="{{ route('appointments.room', $appointment->id) }}" class="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 font-bold shadow-md text-sm flex items-center">Rejoindre la visio 🎥</a>
+                                                <form method="POST" action="{{ route('appointments.complete', $appointment->id) }}">
+                                                    @csrf
+                                                    <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 font-bold shadow-md text-sm flex items-center" onclick="return confirm('Êtes-vous sûr de vouloir terminer définitivement cette séance ?');">Terminer 🚫</button>
+                                                </form>
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
