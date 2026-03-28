@@ -7,6 +7,7 @@ use App\Models\Professional;
 use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
 use Illuminate\Support\Facades\Gate;
+use Carbon\Carbon;      
 
 class AppointmentController extends Controller
 {
@@ -65,6 +66,13 @@ class AppointmentController extends Controller
         
         if($appointment->status !== 'paid') {
             return redirect()->route('dashboard')->with('error', 'Vous ne pouvez pas commencer une séance non payée.');
+        }
+
+        $scheduledAt = Carbon::parse($appointment->scheduled_at);
+        $allowedStartTime = $scheduledAt->copy()->subMinutes(15);
+        
+        if (now()->isBefore($allowedStartTime)) {
+            return redirect()->route('dashboard')->with('error', 'Vous ne pouvez rejoindre la salle que 15 minutes avant l\'heure prévue.');
         }
 
         $appointment->update(['status' => 'in_progress']);
