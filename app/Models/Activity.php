@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Activity extends Model
 {
     protected $fillable = [
-        'professional_id',
+        'association_id',
         'title',
         'description',
         'type',
@@ -18,9 +18,9 @@ class Activity extends Model
         'free_sessions_earned' => 'integer',
     ];
 
-    public function professional()
+    public function association()
     {
-        return $this->belongsTo(Professional::class);
+        return $this->belongsTo(Association::class);
     }
 
     public function participants()
