@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasOne(Patient::class);
     }
 
+    public function association()
+    {
+        return $this->hasOne(Association::class);
+    }
+
     public function professional()
     {
         return $this->hasOne(Professional::class);
