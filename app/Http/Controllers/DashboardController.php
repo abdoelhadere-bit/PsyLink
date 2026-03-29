@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Professional;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Appointment;
+use App\Models\Participation;
 
 
 class DashboardController extends Controller
@@ -26,6 +28,22 @@ class DashboardController extends Controller
             }else{
                 return view('dashboard.pending');
             }
+
+        } else if (auth()->user()->role === 'association') {
+            $association = auth()->user()->association;
+            $activities  = $association ? Activity::where('association_id', $association->id)
+                          ->withCount(['participations', 'participations as validated_count' => fn($q) => $q->where('is_validated', true)])
+                          ->orderByDesc('scheduled_at')
+                          ->get()
+                : collect();
+
+            $pendingParticipations = $association ? Participation::whereHas('activity', fn($q) => $q->where('association_id', $association->id))
+                                           ->where('status', 'pending')
+                                           ->with(['patient.user', 'activity'])
+                                           ->get()
+                : collect();
+
+            return view('dashboard.association', compact('activities', 'pendingParticipations', 'association'));
 
         } else if (auth()->user()->role === 'admin') {
             // Statistiques globales
