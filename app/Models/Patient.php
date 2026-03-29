@@ -8,6 +8,7 @@ class Patient extends User
     protected $table = 'patients';
     protected $fillable = [
         'user_id',
+        'credits'
     ];
 
     public function user()
