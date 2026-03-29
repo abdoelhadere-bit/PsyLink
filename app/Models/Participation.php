@@ -16,4 +16,14 @@ class Participation extends Model
     protected $casts = [
         'is_validated' => 'boolean',
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
+    public function activity()
+    {
+        return $this->belongsTo(Activity::class);
+    }
 }

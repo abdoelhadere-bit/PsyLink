@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfessionalController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfessionalProfileController;
+use App\Http\Controllers\ActivityController;
 
 
 Route::get('/', function () {
@@ -59,3 +60,15 @@ Route::get('/appointments/{appointment}/room', [AppointmentController::class, 'r
 
 Route::get('/checkout/{appointment}', [CheckoutController::class, 'show'])->name('checkout.show')->middleware('auth');
 Route::post('/checkout/{appointment}', [CheckoutController::class, 'process'])->name('checkout.process')->middleware('auth');
+
+// -- Webinaires (Association) --
+Route::middleware('auth')->group(function () {
+    // Créer un nouveau webinaire
+    Route::post('/activities', [ActivityController::class, 'store'])->name('activities.store');
+    // Supprimer un webinaire
+    Route::delete('/activities/{activity}', [ActivityController::class, 'destroy'])->name('activities.destroy');
+    // Un patient demande à rejoindre un webinaire
+    Route::post('/activities/{activity}/join', [ActivityController::class, 'join'])->name('activities.join');
+    // L'Association valide/refuse une demande de participation
+    Route::post('/participations/{participation}/validate', [ActivityController::class, 'validateParticipation'])->name('participations.validate');
+});
