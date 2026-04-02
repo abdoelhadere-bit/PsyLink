@@ -44,7 +44,7 @@ class StoreActivityRequest extends FormRequest
             'scheduled_at.after'        => 'Le webinaire doit être planifié au moins 1 heure dans le futur.',
             'max_participants.required' => 'Le nombre de places est obligatoire.',
             'max_participants.min'      => 'Un webinaire doit accueillir au moins 2 participants.',
-            'max_participants.max'      => 'Un webinaire ne peut pas dépasser 50 participants.',
+            'max_participants.max'      => 'Un webinaire ne peut pas dépasser 5q0 participants.',
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfessionalProfileController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ReportController;
 
 
 Route::get('/', function () {
@@ -63,12 +64,12 @@ Route::post('/checkout/{appointment}', [CheckoutController::class, 'process'])->
 
 // -- Webinaires (Association) --
 Route::middleware('auth')->group(function () {
-    // Créer un nouveau webinaire
     Route::post('/activities', [ActivityController::class, 'store'])->name('activities.store');
-    // Supprimer un webinaire
     Route::delete('/activities/{activity}', [ActivityController::class, 'destroy'])->name('activities.destroy');
-    // Un patient demande à rejoindre un webinaire
     Route::post('/activities/{activity}/join', [ActivityController::class, 'join'])->name('activities.join');
-    // L'Association valide/refuse une demande de participation
     Route::post('/participations/{participation}/validate', [ActivityController::class, 'validateParticipation'])->name('participations.validate');
+
+    // -- Signalements --
+    Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+    Route::post('/admin/reports/{report}/resolve', [ReportController::class, 'resolve'])->name('reports.resolve');
 });
