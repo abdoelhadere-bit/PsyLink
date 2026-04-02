@@ -61,6 +61,14 @@
                 </div>
             </x-card>
 
+            {{-- Message global success/error pour le profil (ex: Signalement envoyé) --}}
+            @if(session('success'))
+                <div class="mb-6 bg-green-50 border border-green-300 text-green-800 rounded-xl px-4 py-3 flex items-center gap-2">
+                    <svg class="h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <!-- Tabs Navigation -->
             <div class="mb-6 border-b border-[var(--color-border-light)]">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
@@ -122,6 +130,43 @@
                         <p class="text-sm text-orange-700">Ce professionnel participe au programme de consultations solidaires. Si votre dossier est validé par la plateforme, vous pouvez bénéficier de séances gratuites ou à tarif réduit avec ce praticien.</p>
                     </div>
                 </x-card>
+
+                <!-- Zone de Signalement (Patient uniquement) -->
+                @auth
+                    @if(auth()->user()->role === 'patient')
+                        <div class="mt-12 pt-8 border-t border-gray-200" x-data="{ openReport: false }">
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm text-gray-500">Un comportement inapproprié ? Aidez-nous à garder la plateforme sûre.</p>
+                                <button @click="openReport = !openReport" type="button" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    Signaler ce praticien
+                                </button>
+                            </div>
+
+                            <div x-show="openReport" x-transition.opacity style="display: {{ $errors->has('reason') ? 'block' : 'none' }};" class="mt-4 bg-white p-6 rounded-2xl border border-red-200 shadow-sm">
+                                <h4 class="text-lg font-bold text-red-700 mb-2">Formulaire de signalement</h4>
+                                <p class="text-sm text-gray-600 mb-4">Votre plainte sera transmise directement à l'équipe de modération Super-Admin de PsyLink. Le praticien n'en sera pas informé.</p>
+                                
+                                <form method="POST" action="{{ route('reports.store') }}">
+                                    @csrf
+                                    <input type="hidden" name="professional_id" value="{{ $professional->id }}">
+                                    
+                                    <div class="mb-4">
+                                        <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">Motif détaillé du signalement *</label>
+                                        <textarea id="reason" name="reason" rows="4" placeholder="Veuillez décrire factuellement le problème rencontré (minimum 20 caractères)..."
+                                            class="w-full rounded-xl border {{ $errors->has('reason') ? 'border-red-400 bg-red-50' : 'border-gray-300' }} px-4 py-2.5 focus:ring-2 focus:ring-red-400 outline-none">{{ old('reason') }}</textarea>
+                                        @error('reason') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                    </div>
+                                    
+                                    <div class="flex justify-end gap-3">
+                                        <button @click="openReport = false" type="button" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium text-sm transition-colors">Annuler</button>
+                                        <button type="submit" class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold text-sm shadow-sm transition-colors">Envoyer le signalement</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+                @endauth
 
             </div>
         </div>

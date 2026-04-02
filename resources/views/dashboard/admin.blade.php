@@ -125,6 +125,70 @@
                 @endif
             </div>
 
+            </div>
+
+            <!-- Zone des Signalements (Plaintes Patients) -->
+            <div class="pt-8">
+                <h3 class="text-xl font-bold leading-6 text-gray-900 mb-4 flex items-center">
+                    <span class="w-2 h-6 bg-red-500 rounded-full mr-2"></span>
+                    Signalements en Attente ({{ $pendingReports->count() }})
+                </h3>
+                
+                @if($pendingReports->isEmpty())
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center text-gray-500">
+                        Aucun signalement à traiter. Tout va bien !
+                    </div>
+                @else
+                    <div class="bg-white shadow overflow-hidden sm:rounded-2xl border border-red-100">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-red-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-red-700 uppercase tracking-wider">Signalé par (Patient)</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-red-700 uppercase tracking-wider">A l'encontre de (Psy)</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-red-700 uppercase tracking-wider w-1/3">Motif de la plainte</th>
+                                    <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($pendingReports as $report)
+                                    <tr class="hover:bg-red-50/30">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0 h-8 w-8">
+                                                    <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs">
+                                                        {{ substr($report->patient->user->name, 0, 1) }}
+                                                    </div>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <div class="text-sm font-medium text-gray-900">{{ $report->patient->user->name }}</div>
+                                                    <div class="text-xs text-gray-500">{{ $report->created_at->format('d/m/Y H:i') }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-bold text-gray-900 border-l-2 border-red-400 pl-2">Dr. {{ $report->professional->user->name }}</div>
+                                            <div class="text-xs text-gray-500 pl-2">{{ $report->professional->user->email }}</div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="text-sm text-gray-800 bg-gray-50 p-3 rounded-lg border border-gray-100 text-sm whitespace-pre-wrap">{{ $report->reason }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <form method="POST" action="{{ route('reports.resolve', $report->id) }}">
+                                                @csrf
+                                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-bold shadow-sm transition-colors text-xs" onclick="return confirm('Avez-vous bien évalué cette plainte et pris les mesures nécessaires (ex: suspension du médecin) avant de la classer ?')">
+                                                    <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                                    Classer (Résolu)
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+            </div>
+
             <!-- Zone Actifs (Suspensables) -->
             <div class="pt-8">
                 <h3 class="text-xl font-bold leading-6 text-gray-900 mb-4 flex items-center">

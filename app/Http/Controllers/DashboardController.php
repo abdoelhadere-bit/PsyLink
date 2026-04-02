@@ -54,8 +54,9 @@ class DashboardController extends Controller
             // Listes de modération
             $pendingPros = Professional::where('is_valid', false)->with('user')->get();
             $activePros = Professional::where('is_valid', true)->with('user')->get();
+            $pendingReports = Report::where('status', 'pending')->with(['patient.user', 'professional.user'])->get();
 
-            return view('dashboard.admin', compact('totalPatients', 'totalPros', 'totalAppointments', 'pendingPros', 'activePros'));
+            return view('dashboard.admin', compact('totalPatients', 'totalPros', 'totalAppointments', 'pendingPros', 'activePros', 'pendingReports'));
         } else {
             return view('welcome');
         }
