@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Patient;
 use App\Models\Professional;
+use App\Models\Association;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisteredUserRequest;
 use App\Http\Requests\LoginUserRequest;
+
 
 class AuthController extends Controller
 {
@@ -26,9 +28,15 @@ class AuthController extends Controller
             Patient::create([
                 'user_id' => $user->id,
             ]);
-        } else {
+        } elseif ($request->role === 'professional') {
             Professional::create([
                 'user_id' => $user->id,
+            ]);
+        } elseif ($request->role === 'association') {
+            Association::create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'description' => 'Nouvelle association partenaire',
             ]);
         }
 

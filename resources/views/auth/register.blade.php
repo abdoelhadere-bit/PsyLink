@@ -2,8 +2,6 @@
     <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[var(--color-background-soft)]">
 
 
-        <!-- Step 2: Formulaires (Gérés via Vanilla JS ou balises visuelles pour simuler AlpineJS si non présent) -->
-        <!-- Ce bloc utilise du JS pur si Alpine n'est pas installé -->
         <div id="register-step-2" class="hidden w-full max-w-xl mx-auto">
             <button onclick="document.getElementById('register-step-1').classList.remove('hidden'); document.getElementById('register-step-2').classList.add('hidden');" class="mb-6 flex items-center text-sm font-medium text-[var(--color-text-gray)] hover:text-gray-900 transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -121,7 +119,7 @@
         <!-- Vanilla JS for handling steps (fallback if Alpine not present) -->
         <div id="register-step-1" class="w-full max-w-4xl mx-auto">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold tracking-tight text-[var(--color-text-dark)] mb-3">Rejoignez la plateforme</h2>
+                <h2 class="text-3xl font-extrabold text-[var(--color-text-dark)] mb-3">Rejoignez l'aventure PsyLink</h2>
                 <p class="text-[var(--color-text-gray)]">Veuillez sélectionner le type de compte que vous souhaitez créer.</p>
             </div>
 
@@ -155,6 +153,17 @@
                         </div>
                     </x-card>
                 </div>
+
+                <!-- Association -->
+                <div onclick="selectRole('association')" class="cursor-pointer group">
+                    <x-card class="h-full border-2 border-transparent hover:border-purple-500 transition-all transform hover:-translate-y-1">
+                        <div class="w-16 h-16 rounded-2xl bg-purple-50 flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Association</h3>
+                        <p class="text-sm text-gray-500">Nous organisons des missions solidaires et offrons des séances aux bénévoles.</p>
+                    </x-card>
+                </div>
             </div>
             
             <div class="text-center mt-10">
@@ -176,8 +185,13 @@
                 document.getElementById('form-subtitle').innerText = 'Rejoignez notre réseau de praticiens validés.';
                 document.getElementById('pro-fields').classList.remove('hidden');
                 document.getElementById('patient-options').classList.add('hidden');
-            } else {
-                document.getElementById('form-title').innerText = 'Inscription Utilisateur';
+            } else if (role === 'patient') {
+                document.getElementById('form-title').innerText = 'Inscription Patient';
+                document.getElementById('form-subtitle').innerText = 'Quelques informations pour sécuriser votre accès.';
+                document.getElementById('pro-fields').classList.add('hidden');
+                document.getElementById('patient-options').classList.remove('hidden');
+            } else if (role === 'association') {
+                document.getElementById('form-title').innerText = 'Inscription Association';
                 document.getElementById('form-subtitle').innerText = 'Quelques informations pour sécuriser votre accès.';
                 document.getElementById('pro-fields').classList.add('hidden');
                 document.getElementById('patient-options').classList.remove('hidden');
