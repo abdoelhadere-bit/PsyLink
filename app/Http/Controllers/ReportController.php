@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreReportRequest;
 use App\Models\Report;
+use Illuminate\Support\Facades\Gate;
 
 class ReportController extends Controller
 {
@@ -15,7 +16,7 @@ class ReportController extends Controller
         
         $patient = auth()->user()->patient;
 
-        // le patient essaie de re-signaler le même psy alors qu'une enquête est en cours
+        // le patient ne peut pas signaler le même psy plusieurs fois
         $existingReport = Report::where('patient_id', $patient->id)
             ->where('professional_id', $request->professional_id)
             ->where('status', 'pending')
@@ -37,9 +38,7 @@ class ReportController extends Controller
 
     public function resolve(Report $report)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Accès non autorisé');
-        }
+        Gate::authorize('admin');
 
         $report->status = 'resolved';
         $report->save();
