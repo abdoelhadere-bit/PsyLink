@@ -22,11 +22,13 @@ class StoreActivityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'            => ['required', 'string', 'min:5', 'max:150'],
-            'description'      => ['required', 'string', 'min:20'],
-            'type'             => ['nullable', 'string', 'max:80'],
-            'scheduled_at'     => ['required', 'date', 'after:' . now()->addHour()->toDateTimeString()],
-            'max_participants' => ['required', 'integer', 'min:2', 'max:50'],
+            'association_id'       => 'exists:associations,id',
+            'title'                => 'required|string|min:5|max:150',
+            'description'          => ['required', 'string', 'min:20'],
+            'type'                 => ['nullable', 'string', 'max:80'],
+            'scheduled_at'         => ['required', 'date', 'after:' . now()->addHour()->toDateTimeString()],
+            'max_participants'     => ['required', 'integer', 'min:2', 'max:50'],
+            'free_sessions_earned' => ['required', 'integer', 'min:0', 'max:5']
         ];
     }
 
@@ -36,15 +38,18 @@ class StoreActivityRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required'            => 'Le titre du webinaire est obligatoire.',
+            'title.required'            => 'Le titre de la mission est obligatoire.',
             'title.min'                 => 'Le titre doit contenir au moins 5 caractères.',
             'description.required'      => 'La description est obligatoire.',
             'description.min'           => 'La description doit contenir au moins 20 caractères.',
-            'scheduled_at.required'     => 'La date et l\'heure du webinaire sont obligatoires.',
-            'scheduled_at.after'        => 'Le webinaire doit être planifié au moins 1 heure dans le futur.',
+            'scheduled_at.required'     => 'La date et l\'heure de la mission sont obligatoires.',
+            'scheduled_at.after'        => 'La mission doit être planifiée au moins 1 heure dans le futur.',
             'max_participants.required' => 'Le nombre de places est obligatoire.',
-            'max_participants.min'      => 'Un webinaire doit accueillir au moins 2 participants.',
-            'max_participants.max'      => 'Un webinaire ne peut pas dépasser 5q0 participants.',
+            'max_participants.min'      => 'Une mission doit accueillir au moins 2 participants.',
+            'max_participants.max'      => 'Une mission ne peut pas dépasser 50 participants.',
+            'free_sessions_earned.required' => 'Le nombre de séances offertes est obligatoire.',
+            'free_sessions_earned.min'  => 'Le nombre de séances offertes ne peut être négatif.',
+            'free_sessions_earned.max'  => 'Le nombre de séances offertes ne peut dépasser 5.',
         ];
     }
 }
