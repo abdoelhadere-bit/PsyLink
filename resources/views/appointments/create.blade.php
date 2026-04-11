@@ -80,9 +80,9 @@
                                            id="scheduled_at" 
                                            required 
                                            class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] block pl-10 p-4 text-base transition-colors" 
-                                           min="{{ now()->addHours(1)->format('Y-m-d\TH:i') }}">
+                                           min="{{ now()->subMinutes(15)->format('Y-m-d\TH:i') }}">
                                 </div>
-                                <p class="text-xs text-gray-500 mt-2 italic">Toute demande doit être faite au moins 1 heure à l'avance.</p>
+                                <p class="text-xs text-gray-500 mt-2 italic">Pour vos tests, vous pouvez sélectionner une heure immédiate.</p>
                                 @error('scheduled_at')
                                     <p class="text-sm text-red-500 mt-2 flex items-center"><svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> {{ $message }}</p>
                                 @enderror

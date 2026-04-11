@@ -92,13 +92,7 @@ class AppointmentController extends Controller
             return redirect()->route('dashboard')->with('error', 'La salle de consultation n\'est pas ouverte (Séance non payée ou terminée).');
         }
 
-        $user = auth()->user();
-        if ($user->role === 'patient' && ($user->patient === null || $user->patient->id !== $appointment->patient_id)) {
-            abort(403, 'Accès refusé à cette salle.');
-        }
-        if ($user->role === 'professional' && ($user->professional === null || $user->professional->id !== $appointment->professional_id)) {
-            abort(403, 'Accès refusé à cette salle.');
-        }
+        Gate::authorize('viewRoom', $appointment);
 
         return view('appointments.room', compact('appointment'));
     }

@@ -8,61 +8,6 @@ use Illuminate\Auth\Access\Response;
 
 class AppointmentPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Appointment $appointment): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Appointment $appointment): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Appointment $appointment): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Appointment $appointment): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Appointment $appointment): bool
-    {
-        return false;
-    }
 
     public function accept(User $user, Appointment $appointment)
     {
@@ -82,5 +27,23 @@ class AppointmentPolicy
     public function complete(User $user, Appointment $appointment)
     {
         return $user->role === 'professional' && $appointment->professional_id == $user->professional->id;
+    }
+
+    public function viewRoom(User $user, Appointment $appointment)
+    {
+        if ($user->role === 'patient') {
+            return $user->patient !== null && $user->patient->id === $appointment->patient_id;
+        }
+
+        if ($user->role === 'professional') {
+            return $user->professional !== null && $user->professional->id === $appointment->professional_id;
+        }
+
+        return false;
+    }
+
+    public function checkout(User $user, Appointment $appointment)
+    {
+        return $user->role === 'patient' && $user->patient && $user->patient->id === $appointment->patient_id;
     }
 }
