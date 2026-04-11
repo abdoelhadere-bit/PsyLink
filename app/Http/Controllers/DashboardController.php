@@ -9,57 +9,24 @@ use App\Models\Activity;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Appointment;
 use App\Models\Participation;
+use App\Models\Report;
+use App\Http\Controllers\Dashboards\PatientDashboardController;
+use App\Http\Controllers\Dashboards\ProfessionalDashboardController;
+use App\Http\Controllers\Dashboards\AssociationDashboardController;
+use App\Http\Controllers\Dashboards\AdminDashboardController;
 
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->role === 'patient') {
-
-    $appointments = Appointment::with('professional.user')->where('patient_id', auth()->user()->patient->id)->get();
-            return view('dashboard.patient', compact('appointments'));
-
-        } else if (auth()->user()->role === 'professional') {
-
-            $appointments = Appointment::with('patient.user')->where('professional_id', auth()->user()->professional->id)->get();
-            if(auth()->user()->professional->is_valid){
-                return view('dashboard.professional', compact('appointments'));
-            }else{
-                return view('dashboard.pending');
-            }
-
-        } else if (auth()->user()->role === 'association') {
-            $association = auth()->user()->association;
-            $activities  = $association ? Activity::where('association_id', $association->id)
-                          ->withCount(['participations', 'participations as validated_count' => fn($q) => $q->where('is_validated', true)])
-                          ->orderByDesc('scheduled_at')
-                          ->get()
-                : collect();
-
-            $pendingParticipations = $association ? Participation::whereHas('activity', fn($q) => $q->where('association_id', $association->id))
-                                           ->where('status', 'pending')
-                                           ->with(['patient.user', 'activity'])
-                                           ->get()
-                : collect();
-
-            return view('dashboard.association', compact('activities', 'pendingParticipations', 'association'));
-
-        } else if (auth()->user()->role === 'admin') {
-            // Statistiques globales
-            $totalPatients = User::where('role', 'patient')->count();
-            $totalPros = Professional::where('is_valid', true)->count();
-            $totalAppointments = Appointment::whereNotIn('status', ['pending', 'rejected', 'cancelled'])->count();
-
-            // Listes de modération
-            $pendingPros = Professional::where('is_valid', false)->with('user')->get();
-            $activePros = Professional::where('is_valid', true)->with('user')->get();
-            $pendingReports = Report::where('status', 'pending')->with(['patient.user', 'professional.user'])->get();
-
-            return view('dashboard.admin', compact('totalPatients', 'totalPros', 'totalAppointments', 'pendingPros', 'activePros', 'pendingReports'));
-        } else {
-            return view('welcome');
-        }
+        return match (auth()->user()->role) {
+            'patient' => app()->call(PatientDashboardController::class),
+            'professional' => app()->call(ProfessionalDashboardController::class),
+            'association' => app()->call(AssociationDashboardController::class),
+            'admin' => app()->call(AdminDashboardController::class),
+            default => view('welcome'),
+        };
     }
 
     public function toggleProStatus($id)
