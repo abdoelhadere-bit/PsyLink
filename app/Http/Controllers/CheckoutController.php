@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Models\Payment;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\ProcessCheckoutRequest;
 
 class CheckoutController extends Controller
 {
@@ -16,32 +18,29 @@ class CheckoutController extends Controller
         }
 
         // Seul le patient concerné peut accéder au paiement
-        if (auth()->user()->role !== 'patient' || auth()->user()->patient->id !== $appointment->patient_id) {
-            abort(403, 'Vous ne pouvez pas payer ce rendez-vous.');
-        }
+        \Illuminate\Support\Facades\Gate::authorize('checkout', $appointment);
 
         return view('checkout.index', compact('appointment'));
     }
 
-    public function process(Request $request, Appointment $appointment)
+    public function process(ProcessCheckoutRequest $request, Appointment $appointment)
     {
+        $patient = auth()->user()->patient;
         if ($appointment->status !== 'waiting_payment') {
             return redirect()->route('dashboard')->with('error', 'Le paiement n\'est pas requis.');
         }
 
-        if (auth()->user()->role !== 'patient' || auth()->user()->patient->id !== $appointment->patient_id) {
-            abort(403);
+        Gate::authorize('checkout', $appointment);
+
+        if ($request->has('use_credits')) {
+
+            if ($patient->credits < 1) {
+                return back()->with('error', 'Vous n\'avez pas assez de cœurs ❤️ pour cette séance.');
+            }
+            $patient->decrement('credits', 1);
+            $appointment->update(['status' => 'paid']);
+            return redirect()->route('dashboard')->with('success', 'Séance payée avec vos cœurs solidaire !');
         }
-        $request->validate([
-            'card_name' => ['required', 'string', 'max:255'],
-            'card_number' => ['required', 'string', 'regex:/^[\d\s]{16,19}$/'],
-            'exp_date' => ['required', 'string', 'regex:/^(0[1-9]|1[0-2])\/[0-9]{2}$/'],
-            'cvc' => ['required', 'string', 'regex:/^[0-9]{3,4}$/'],
-        ], [
-            'exp_date.regex' => 'La date d\'expiration doit être au format MM/YY (ex: 12/26)',
-            'card_number.regex' => 'Numéro de carte invalide.',
-            'cvc.regex' => 'Cryptogramme invalide.',
-        ]);
         Payment::create([
             'appointment_id' => $appointment->id,
             'amount' => $appointment->price,

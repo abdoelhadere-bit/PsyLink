@@ -28,6 +28,20 @@
                     </div>
                 </div>
 
+                @if(auth()->user()->patient->credits > 0)
+                    <div class="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl">
+                        <p class="text-sm font-bold text-red-600 mb-3 flex items-center gap-2">
+                           ❤️ Vous possédez {{ auth()->user()->patient->credits }} cœurs solidaires.
+                        </p>
+                        <form action="{{ route('checkout.process', $appointment->id) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="use_credits" value="1">
+                            <button class="w-full !bg-red-500 !text-white !border-none hover:bg-red-600">
+                                Payer avec 1 Cœur Solidaire
+                            </button>
+                        </form>
+                    </div>
+                @endif
                 <!-- Formulaire -->
                 <form class="space-y-5" action="{{ route('checkout.process', $appointment->id) }}" method="POST">
                     @csrf
@@ -82,7 +96,7 @@
 
                     <div class="flex items-center mt-6">
                         <svg class="w-4 h-4 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                        <span class="text-xs text-gray-500">Paiement crypté et sécurisé. (Simulation pour MVP).</span>
+                        <span class="text-xs text-gray-500">Paiement crypté et sécurisé.</span>
                     </div>
 
                     <div class="mt-6">
