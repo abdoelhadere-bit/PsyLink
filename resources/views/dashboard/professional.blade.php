@@ -3,6 +3,20 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    @if(session('error'))
+                        <div class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-sm" role="alert">
+                            <p class="font-bold">Erreur</p>
+                            <p>{{ session('error') }}</p>
+                        </div>
+                    @endif
+
+                    @if(session('success'))
+                        <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-sm" role="alert">
+                            <p class="font-bold">Succès</p>
+                            <p>{{ session('success') }}</p>
+                        </div>
+                    @endif
+
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold">Mes Rendez-vous</h2>
                         <a href="{{ route('professional.profile.edit') }}" class="px-4 py-2 bg-gray-800 text-white text-sm font-semibold rounded-lg hover:bg-gray-700 shadow flex items-center gap-2">
@@ -44,15 +58,11 @@
                                                 $scheduledAt = \Carbon\Carbon::parse($appointment->scheduled_at);
                                                 $allowedStartTime = $scheduledAt->copy()->subMinutes(15);
                                             @endphp
-                                            
-                                            @if(now()->isBefore($allowedStartTime))
-                                                <button disabled class="px-4 py-2 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed border border-gray-300 shadow-sm" title="Disponible 15min avant l'heure">À venir ({{ $scheduledAt->format('H:i') }}) 🕒</button>
-                                            @else
+                                          
                                                 <form method="POST" action="{{ route('appointments.start', $appointment->id) }}">
                                                     @csrf
                                                     <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 font-bold shadow-md animate-pulse">Lancer la séance 🎥</button>
                                                 </form>
-                                            @endif
                                         @endif
                                         
                                         @if($appointment->status === 'in_progress')

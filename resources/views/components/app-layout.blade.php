@@ -7,9 +7,11 @@
 
         <title>{{ config('app.name', 'Soutien Psy') }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600|poppins:400,500,600,700&display=swap" rel="stylesheet" />
+        
+        <!-- Alpine.js -->
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -30,15 +32,26 @@
                         </a>
                         
                         <div class="hidden sm:-my-px sm:ml-10 sm:flex sm:space-x-8">
-                            <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">Accueil</a>
-                            <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">Trouver un pro</a>
+                            <a href="{{route('professionals.index')}}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">Trouver un pro</a>
+                            <a href="{{route('activities.index')}}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">Trouver une activite</a>
                             <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">À propos</a>
                         </div>
                     </div>
-                    
                     <div class="hidden sm:flex sm:items-center sm:ml-6 space-x-4">
-                        <a href="/login" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Connexion</a>
-                        <x-button variant="primary" class="!py-2 !px-4 !rounded-lg text-sm">S'inscrire</x-button>
+                        @guest
+                            <a href="/login" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Connexion</a>
+                            <a href="/register" class="inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold bg-[var(--color-primary)] text-white hover:bg-blue-600 shadow-sm transition-all">S'inscrire</a>
+                        @endguest
+                        
+                        @auth
+                            <a href="{{ route('dashboard') }}" class="text-sm font-bold text-[var(--color-primary)] hover:text-blue-800 transition-colors flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                                Mon Espace ({{ auth()->user()->name }})
+                            </a>
+                            <a href="{{ route('logout') }}" class="text-sm font-medium text-red-500 hover:text-red-700 transition-colors ml-4">
+                                Déconnexion
+                            </a>
+                        @endauth
                     </div>
 
                     <!-- Mobile menu button -->

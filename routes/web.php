@@ -9,6 +9,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfessionalProfileController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReviewController;
 
 
 Route::get('/', function () {
@@ -62,8 +63,9 @@ Route::get('/appointments/{appointment}/room', [AppointmentController::class, 'r
 Route::get('/checkout/{appointment}', [CheckoutController::class, 'show'])->name('checkout.show')->middleware('auth');
 Route::post('/checkout/{appointment}', [CheckoutController::class, 'process'])->name('checkout.process')->middleware('auth');
 
-// -- Webinaires (Association) --
+// -- Association --
 Route::middleware('auth')->group(function () {
+    Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
     Route::post('/activities', [ActivityController::class, 'store'])->name('activities.store');
     Route::delete('/activities/{activity}', [ActivityController::class, 'destroy'])->name('activities.destroy');
     Route::post('/activities/{activity}/join', [ActivityController::class, 'join'])->name('activities.join');
@@ -73,3 +75,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
     Route::post('/admin/reports/{report}/resolve', [ReportController::class, 'resolve'])->name('reports.resolve');
 });
+
+
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
+
+Route::get('/test', function(){
+    return view('auth.test');
+});
+
