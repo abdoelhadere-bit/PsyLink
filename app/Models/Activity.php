@@ -43,4 +43,18 @@ class Activity extends Model
     {
         return $this->participations()->where('is_validated', true)->count() >= $this->max_participants;
     }
+
+   
+    public function getFillRateAttribute(): float
+    {
+        if ($this->max_participants <= 0) {
+            return 0;
+        }
+
+        $validatedCount = $this->validated_count ?? $this->participations()->where('is_validated', true)->count();
+        
+        $progress = ($validatedCount / $this->max_participants) * 100;
+        
+        return min($progress, 100);
+    }
 }
