@@ -2,7 +2,6 @@
     <div class="bg-[var(--color-background-soft)] min-h-screen py-10" x-data="{ tab: 'about' }">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <!-- Breadcrumbs -->
             <nav class="flex mb-6" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm text-[var(--color-text-gray)]">
                     <li class="inline-flex items-center">
@@ -44,8 +43,8 @@
                                 
                                 <div class="flex items-center gap-1 bg-yellow-50 text-yellow-700 px-3 py-1 rounded-lg inline-flex mb-4">
                                     <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                    <span class="text-base font-bold">4.9</span>
-                                    <a href="#" class="text-sm underline ml-1 opacity-75 hover:opacity-100">(42 avis patients)</a>
+                                    <span class="text-base font-bold">{{$avgRating}}</span>
+                                    <a href="#" class="text-sm underline ml-1 opacity-75 hover:opacity-100">({{$totalReviews}} avis patients)</a>
                                 </div>
                             </div>
                             
@@ -72,21 +71,20 @@
             <!-- Tabs Navigation -->
             <div class="mb-6 border-b border-[var(--color-border-light)]">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                    <button class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-[var(--color-primary)] border-[var(--color-primary)]" aria-current="page">
+                    <button @click="tab = 'about'" :class="tab === 'about' ? 'text-[var(--color-primary)] border-[var(--color-primary)]' : 'border-transparent text-[var(--color-text-gray)] hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors" aria-current="page">
                         À propos
                     </button>
-                    <!-- Les autres onglets pourraient être activés via JS, ici mockés statiquement -->
-                    <button class="whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm text-[var(--color-text-gray)] hover:text-gray-700 hover:border-gray-300 transition-colors">
+                    <button @click="tab = 'disponibilites'" :class="tab === 'disponibilites' ? 'text-[var(--color-primary)] border-[var(--color-primary)]' : 'border-transparent text-[var(--color-text-gray)] hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
                         Disponibilités
                     </button>
-                    <button class="whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm text-[var(--color-text-gray)] hover:text-gray-700 hover:border-gray-300 transition-colors flex items-center gap-2">
-                        Avis <span class="bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">42</span>
+                    <button @click="tab = 'avis'" :class="tab === 'avis' ? 'text-[var(--color-primary)] border-[var(--color-primary)]' : 'border-transparent text-[var(--color-text-gray)] hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center gap-2">
+                        Avis <span class="bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{$totalReviews}}</span>
                     </button>
                 </nav>
             </div>
 
-            <!-- Tab Content: À propos (Défaut) -->
-            <div class="space-y-8">
+            <!-- À propos -->
+            <div x-show="tab === 'about'" class="space-y-8" x-cloak>
                 <section>
                     <h3 class="text-xl font-bold text-[var(--color-text-dark)] mb-4">Présentation</h3>
                     <div class="prose prose-blue max-w-none text-[var(--color-text-gray)] leading-relaxed">
@@ -110,11 +108,11 @@
                         <ul class="space-y-3">
                             <li class="flex items-center text-[var(--color-text-gray)]">
                                 <svg class="w-5 h-5 text-emerald-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                Visioconférence (45 min)
+                                Visioconférence
                             </li>
                             <li class="flex items-center text-[var(--color-text-gray)]">
                                 <svg class="w-5 h-5 text-emerald-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                Chat écrit sécurisé (45 min)
+                                Chat écrit sécurisé
                             </li>
                         </ul>
                     </section>
@@ -131,10 +129,10 @@
                     </div>
                 </x-card>
 
-                <!-- Zone de Signalement (Patient uniquement) -->
+                <!-- Zone de Signalement -->
                 @auth
                     @if(auth()->user()->role === 'patient')
-                        <div class="mt-12 pt-8 border-t border-gray-200" x-data="{ openReport: false }">
+                        <div class="mt-12 pt-8 border-t border-gray-200" x-data="{ openReport: {{ $errors->has('reason') ? 'true' : 'false' }} }">
                             <div class="flex items-center justify-between">
                                 <p class="text-sm text-gray-500">Un comportement inapproprié ? Aidez-nous à garder la plateforme sûre.</p>
                                 <button @click="openReport = !openReport" type="button" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
@@ -143,7 +141,7 @@
                                 </button>
                             </div>
 
-                            <div x-show="openReport" x-transition.opacity style="display: {{ $errors->has('reason') ? 'block' : 'none' }};" class="mt-4 bg-white p-6 rounded-2xl border border-red-200 shadow-sm">
+                            <div x-show="openReport" x-transition.opacity class="mt-4 bg-white p-6 rounded-2xl border border-red-200 shadow-sm" style="display: none;">
                                 <h4 class="text-lg font-bold text-red-700 mb-2">Formulaire de signalement</h4>
                                 <p class="text-sm text-gray-600 mb-4">Votre plainte sera transmise directement à l'équipe de modération Super-Admin de PsyLink. Le praticien n'en sera pas informé.</p>
                                 
@@ -167,7 +165,78 @@
                         </div>
                     @endif
                 @endauth
+            </div> 
 
+            <!-- Tab Content: Avis -->
+                <div x-show="tab === 'avis'" class="mt-12 pt-8 border-t border-gray-200" x-cloak>
+                    <h3 class="text-xl font-bold text-[var(--color-text-dark)] mb-6">Avis & Évaluations</h3>
+                    
+                    @auth
+                        @if($eligibleAppointment)
+                            <!-- Formulaire de création d'avis -->
+                            <div class="bg-blue-50/50 rounded-2xl p-6 border border-blue-100 mb-8" x-data="{ rating: 0, hoverRating: 0 }">
+                                <h4 class="text-lg font-bold text-gray-800 mb-2">Comment s'est passée votre séance ?</h4>
+                                <p class="text-sm text-gray-500 mb-4">Votre avis aide les autres patients à trouver le bon praticien.</p>
+                                
+                                <form action="{{ route('reviews.store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="appointment_id" value="{{ $eligibleAppointment->id }}">
+                                    <!-- Ce input caché stoquera la note de 1 à 5 -->
+                                    <input type="hidden" name="rating" x-model="rating">
+                                    <div class="mb-4">
+                                        <div class="flex items-center gap-1">
+                                            <template x-for="i in 5">
+                                                <svg @click="rating = i" 
+                                                     @mouseenter="hoverRating = i" 
+                                                     @mouseleave="hoverRating = 0"
+                                                     class="w-8 h-8 cursor-pointer transition-colors" 
+                                                     :class="(hoverRating >= i || rating >= i) ? 'text-yellow-400' : 'text-gray-300'"
+                                                     fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                </svg>
+                                            </template>
+                                        </div>
+                                        @error('rating') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Votre commentaire (min. 10 caractères)</label>
+                                        <textarea id="comment" name="comment" rows="3" class="w-full rounded-xl border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-400 outline-none">{{ old('comment') }}</textarea>
+                                        @error('comment') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+                                    <button type="submit" :disabled="rating === 0" :class="rating === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600 hover:shadow-lg'" class="px-6 py-2 bg-[var(--color-primary)] text-white rounded-lg font-bold text-sm transition-all">
+                                        Publier l'avis
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            @foreach($reviews as $review)
+                            <div class="bg-white rounded-2xl p-6 border border-gray-200 mb-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-600">{{ substr($review->reviewer->name, 0, 1) }}</span>
+                                        </div>
+                                        <span class="font-bold text-gray-800">{{ $review->reviewer->name }}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        @for($i = 1; $i <= $review->rating; $i++)
+                                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                            </svg>
+                                        @endfor
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 mb-2">{{ $review->comment }}</p>
+                                <span class="text-xs text-gray-400">{{ $review->created_at->format('d/m/Y H:i') }}</span>
+                            </div>
+                            @endforeach
+                        @endif
+                    @endauth
+                    
+                    <!-- Ici on bouclera bientôt sur tous les avis existants du docteur -->
+                    <div class="text-center text-gray-400 py-4">Pas encore d'avis pour le moment.</div>
+                </div>           
+                  
             </div>
         </div>
     </div>

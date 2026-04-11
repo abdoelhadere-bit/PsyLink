@@ -3,34 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Request\UpdateProfessionalProfileRequest;
 
 class ProfessionalProfileController extends Controller
 {
     public function edit()
     {
-        $user = auth()->user();
-        
-        if ($user->role !== 'professional' || !$user->professional) {
-            abort(403);
-        }
+        Gate::authorize('professional');
 
+        $user = auth()->user();
         $professional = $user->professional;
         return view('professional.profile', compact('professional'));
     }
 
-    public function update(Request $request)
+    public function update(UpdateProfessionalProfileRequest $request)
     {
-        $user = auth()->user();
-        
-        if ($user->role !== 'professional' || !$user->professional) {
-            abort(403);
-        }
+        Gate::authorize('professional');
 
-        $request->validate([
-            'specialty' => 'nullable|string|max:255',
-            'bio' => 'nullable|string|max:1000',
-            'hourly_rate' => 'required|numeric|min:0|max:500',
-        ]);
+        $user = auth()->user();
 
         $user->professional->update([
             'specialty' => $request->specialty,

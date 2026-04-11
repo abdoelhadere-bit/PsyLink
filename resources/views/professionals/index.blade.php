@@ -9,88 +9,35 @@
             </div>
 
             <div class="flex flex-col lg:flex-row gap-8">
-                <!-- Sidebar Filtres (Desktop) -->
-                <aside class="w-full lg:w-1/4">
-                    <x-card class="sticky top-24 p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-lg font-bold">Filtres</h2>
-                            <button type="button" class="text-sm text-[var(--color-primary)] hover:underline">Réinitialiser</button>
+                
+            <aside class="w-full lg:w-1/4">
+                <form action="{{ route('professionals.index') }}" method="GET">
+                    <x-card class="p-6">
+                        <div class="mb-6">
+                            <label class="block text-sm font-bold mb-2">Rechercher un nom</label>
+                            <input type="text" name="search" value="{{ request('search') }}" class="w-full rounded-xl border-gray-200">
                         </div>
 
-                        <div class="space-y-6">
-                            <!-- Spécialité -->
-                            <div>
-                                <h3 class="text-sm font-semibold text-[var(--color-text-dark)] mb-3">Spécialité</h3>
-                                <div class="space-y-2">
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="checkbox" class="rounded border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
-                                        <span class="ml-2 text-sm text-[var(--color-text-gray)]">Psychologue Clinicien</span>
-                                    </label>
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="checkbox" class="rounded border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
-                                        <span class="ml-2 text-sm text-[var(--color-text-gray)]">Psychiatre</span>
-                                    </label>
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="checkbox" class="rounded border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
-                                        <span class="ml-2 text-sm text-[var(--color-text-gray)]">Thérapeute TCC</span>
-                                    </label>
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="checkbox" class="rounded border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
-                                        <span class="ml-2 text-sm text-[var(--color-text-gray)]">Coach de vie</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Type de Consultation -->
-                            <div class="pt-6 border-t border-[var(--color-border-light)]">
-                                <h3 class="text-sm font-semibold text-[var(--color-text-dark)] mb-3">Type de consultation</h3>
-                                <div class="space-y-2">
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="checkbox" checked class="rounded border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
-                                        <span class="ml-2 text-sm text-[var(--color-text-gray)]">Visioconférence</span>
-                                    </label>
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="checkbox" checked class="rounded border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
-                                        <span class="ml-2 text-sm text-[var(--color-text-gray)]">Chat écrit</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Tarif -->
-                            <div class="pt-6 border-t border-[var(--color-border-light)]">
-                                <h3 class="text-sm font-semibold text-[var(--color-text-dark)] mb-3">Tarif maximum : <span class="font-normal text-[var(--color-primary)]" id="price-display">80€</span></h3>
-                                <input type="range" min="30" max="150" value="80" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[var(--color-primary)]" oninput="document.getElementById('price-display').innerText = this.value + '€'">
-                                <div class="flex justify-between text-xs text-gray-400 mt-2">
-                                    <span>30€</span>
-                                    <span>150€+</span>
-                                </div>
-                            </div>
-
-                            <!-- Note Minimum -->
-                            <div class="pt-6 border-t border-[var(--color-border-light)]">
-                                <h3 class="text-sm font-semibold text-[var(--color-text-dark)] mb-3">Note minimum</h3>
-                                <div class="flex items-center justify-between gap-2">
-                                    <button class="flex-1 py-1 border border-gray-300 rounded text-sm hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]">3+</button>
-                                    <button class="flex-1 py-1 border border-gray-300 rounded text-sm hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]">4+</button>
-                                    <button class="flex-1 py-1 bg-[var(--color-primary)] border border-[var(--color-primary)] text-white rounded text-sm">4.5+</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Actes Solidaires -->
-                            <div class="pt-6 border-t border-[var(--color-border-light)]">
-                                <label class="flex items-start cursor-pointer group">
-                                    <div class="flex items-center h-5">
-                                        <input type="checkbox" class="rounded text-[var(--color-secondary)] border-gray-300 focus:ring-[var(--color-secondary)]">
-                                    </div>
-                                    <div class="ml-3 text-sm">
-                                        <span class="font-medium text-[var(--color-text-dark)] group-hover:text-[var(--color-secondary)] transition-colors">Accepte les consultations solidaires</span>
-                                        <p class="text-xs text-gray-500 mt-1">Soutien gratuit via bénévolat</p>
-                                    </div>
-                                </label>
-                            </div>
+                        <div class="mb-6">
+                            <h3 class="font-bold mb-2">Spécialité</h3>
+                            <select name="specialty" class="w-full rounded-xl border-gray-200" onchange="this.form.submit()">
+                                <option value="">Toutes</option>
+                                <option value="psychologue" {{ request('specialty') == 'psychologue' ? 'selected' : '' }}>Psychologue</option>
+                                <option value="psychiatre" {{ request('specialty') == 'psychiatre' ? 'selected' : '' }}>Psychiatre</option>
+                            </select>
                         </div>
+
+                        <div class="mb-6">
+                            <h3 class="font-bold mb-2">Prix Max ({{ request('price_max', 100) }}€)</h3>
+                            <input type="range" name="price_max" min="0" max="200" step="5" value="{{ request('price_max', 100) }}" 
+                                   class="w-full" oninput="this.form.submit()">
+                        </div>
+
+                        <x-button variant="secondary" class="w-full">Réinitialiser les filtres</x-button>
                     </x-card>
-                </aside>
+                </form>
+            </aside>
+
 
                 <!-- Liste des Professionnels -->
                 <main class="w-full lg:w-3/4">
