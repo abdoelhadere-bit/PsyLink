@@ -46,4 +46,14 @@ class Appointment extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    public function isReadyToStart(): bool
+    {
+        if (!$this->scheduled_at) {
+            return false;
+        }
+
+        $allowedStartTime = $this->scheduled_at->copy()->subMinutes(15);
+        return now()->isAfter($allowedStartTime) || now()->isSameAs($allowedStartTime);
+    }
 }

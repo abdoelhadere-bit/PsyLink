@@ -67,11 +67,8 @@ class AppointmentController extends Controller
         if($appointment->status !== 'paid') {
             return redirect()->route('dashboard')->with('error', 'Vous ne pouvez pas commencer une séance non payée.');
         }
-
-        $scheduledAt = Carbon::parse($appointment->scheduled_at);
-        $allowedStartTime = $scheduledAt->copy()->subMinutes(15);
         
-        if (now()->isBefore($allowedStartTime)) {
+        if (!$appointment->isReadyToStart()) {
             return redirect()->route('dashboard')->with('error', 'Vous ne pouvez rejoindre la salle que 15 minutes avant l\'heure prévue.');
         }
 
