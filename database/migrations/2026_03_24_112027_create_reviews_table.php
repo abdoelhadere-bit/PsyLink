@@ -18,6 +18,8 @@ return new class extends Migration
             $table->tinyInteger('rating')->unsigned();
             $table->text('comment')->nullable();
             $table->timestamps();
+
+            $table->unique(['appointment_id', 'reviewer_id']);
         });
     }
 
