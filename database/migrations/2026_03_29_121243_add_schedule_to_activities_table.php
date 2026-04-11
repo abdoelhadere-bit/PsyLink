@@ -24,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('activities', function (Blueprint $table) {
             $table->dropColumn(['scheduled_at', 'max_participants']);
+            
         });
     }
 };
