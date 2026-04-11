@@ -2,25 +2,7 @@
     <div class="min-h-[calc(100vh-4rem)] bg-[var(--color-background-soft)] py-10 px-4 sm:px-6 lg:px-8">
         
         <!-- Flash Messages -->
-        @if (session('success'))
-            <div class="max-w-5xl mx-auto mb-6">
-                <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
-                    <div class="flex items-center">
-                        <svg class="w-6 h-6 text-emerald-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <p class="text-sm text-emerald-800 font-medium">{{ session('success') }}</p>
-                    </div>
-                </div>
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="max-w-5xl mx-auto mb-6">
-                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl shadow-sm">
-                    <div class="flex items-center">
-                        <p class="text-sm text-red-800 font-medium">{{ session('error') }}</p>
-                    </div>
-                </div>
-            </div>
-        @endif
+        <x-flash-messages />
 
         <div class="max-w-5xl mx-auto">
             <!-- Header -->
