@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfessionalProfileController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ProfileController;
 
 
 Route::get('/', function () {
@@ -30,6 +31,12 @@ Route::get('/register', function () {
 Route::post('/register', [AuthController::class, 'register'])->name('register')->middleware('guest');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+});
 
 Route::get('/about', function () {
     return view('about');

@@ -44,13 +44,16 @@
                         @endguest
                         
                         @auth
-                            <a href="{{ route('dashboard') }}" class="text-sm font-bold text-[var(--color-primary)] hover:text-blue-800 transition-colors flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                                Mon Espace ({{ auth()->user()->name }})
-                            </a>
-                            <a href="{{ route('logout') }}" class="text-sm font-medium text-red-500 hover:text-red-700 transition-colors ml-4">
-                                Déconnexion
-                            </a>
+                            <div class="flex items-center gap-6">
+                                <a href="{{ route('profile.edit') }}" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Mon Profil</a>
+                                <a href="{{ route('dashboard') }}" class="text-sm font-bold text-[var(--color-primary)] hover:text-blue-800 transition-colors flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                                    Mon Espace
+                                </a>
+                                <a href="{{ route('logout') }}" class="text-sm font-medium text-red-500 hover:text-red-700 transition-colors">
+                                    Déconnexion
+                                </a>
+                            </div>
                         @endauth
                     </div>
 
