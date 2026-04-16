@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/about', function () {
     return view('about');
-})->middleware('auth');  
+})->middleware('auth')->name('about');  
 
 Route::get('/professionals', [ProfessionalController::class, 'index'])->name('professionals.index');
 
