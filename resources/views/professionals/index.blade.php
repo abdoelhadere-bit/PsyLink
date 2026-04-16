@@ -44,7 +44,7 @@
                     <!-- Top Bar Résultats -->
                     <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-[var(--color-border-light)] mb-6">
                         <p class="text-sm font-medium text-[var(--color-text-dark)] mb-4 sm:mb-0">
-                            12 professionnels trouvés
+                            {{ $professionals->count() }} professionnels trouvés
                         </p>
                         <div class="flex items-center gap-2">
                             <span class="text-sm text-[var(--color-text-gray)]">Trier par :</span>

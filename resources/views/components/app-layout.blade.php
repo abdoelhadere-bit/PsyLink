@@ -93,17 +93,17 @@
                     <div>
                         <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">Liens Utiles</h3>
                         <ul class="space-y-3">
-                            <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">Trouver un professionnel</a></li>
-                            <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">Comment ça marche</a></li>
-                            <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">Accès solidaire</a></li>
+                            <li><a href="{{ route('professionals.index') }}" class="text-sm text-gray-500 hover:text-gray-900">Trouver un professionnel</a></li>
+                            <li><a href="{{ route('about') }}" class="text-sm text-gray-500 hover:text-gray-900">Comment ça marche</a></li>
+                            <li><a href="{{ route('activities.index') }}" class="text-sm text-gray-500 hover:text-gray-900">Accès solidaire</a></li>
                         </ul>
                     </div>
                     <div>
                         <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">Légal</h3>
                         <ul class="space-y-3">
-                            <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">Mentions légales</a></li>
-                            <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">Confidentialité</a></li>
-                            <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">CGU</a></li>
+                            <li><a href="/" class="text-sm text-gray-500 hover:text-gray-900">Mentions légales</a></li>
+                            <li><a href="/" class="text-sm text-gray-500 hover:text-gray-900">Confidentialité</a></li>
+                            <li><a href="/" class="text-sm text-gray-500 hover:text-gray-900">CGU</a></li>
                         </ul>
                     </div>
                 </div>

@@ -101,7 +101,7 @@
                             </div>
                             <div class="ml-3 text-sm">
                                 <label for="terms" class="text-[var(--color-text-gray)]">
-                                    J'accepte les <a href="#" class="font-medium text-[var(--color-primary)] hover:text-blue-500">Conditions Générales d'Utilisation</a> et la <a href="#" class="font-medium text-[var(--color-primary)] hover:text-blue-500">Politique de Confidentialité</a>.
+                                    J'accepte les <a href="{{ route('about') }}" class="font-medium text-[var(--color-primary)] hover:text-blue-500">Conditions Générales d'Utilisation</a> et la <a href="{{ route('about') }}" class="font-medium text-[var(--color-primary)] hover:text-blue-500">Politique de Confidentialité</a>.
                                 </label>
                             </div>
                         </div>
