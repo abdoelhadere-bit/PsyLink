@@ -58,7 +58,16 @@ class StoreAppointmentRequest extends FormRequest
                     ->exists();
 
                 if ($overlap) {
-                    $validator->errors()->add('scheduled_at', 'Le praticien est déjà occupé sur ce créneau horaire (Les séances durent 45 minutes, veuillez choisir un horaire plus espacé).');
+                    $validator->errors()->add('scheduled_at', 'Le praticien est déjà occupé sur ce créneau horaire.');
+                }
+
+                $patientOverlap = Appointment::where('patient_id', auth()->user()->patient->id)
+                    ->whereNotIn('status', ['rejected', 'cancelled', 'completed'])
+                    ->whereBetween('scheduled_at', [$startWindow, $endWindow])
+                    ->exists();
+
+                if ($patientOverlap) {
+                    $validator->errors()->add('scheduled_at', 'Vous avez déjà un autre rendez-vous prévu sur ce créneau horaire.');
                 }
             } catch (\Exception $e) {
             }

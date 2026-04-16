@@ -32,37 +32,37 @@
         </div>
 
         <!-- Zone Vidéo -->
-        <div class="relative flex-1 flex items-center justify-center bg-black">
-            <video id="remoteVideo" class="w-full h-full object-cover" autoplay playsinline></video>
+        <div class="relative flex-1 flex items-center justify-center bg-black overflow-hidden">
+            <video id="remoteVideo" class="max-w-full max-h-full w-full h-full object-cover z-0" autoplay playsinline></video>
             
-            <!-- Ma vidéo locale — z-50 pour être au-dessus de la sidebar (z-40) -->
-            <div class="absolute bottom-24 right-6 w-32 h-48 sm:w-48 sm:h-64 bg-gray-800 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl transition-transform hover:scale-105 z-50">
+            <!-- Ma vidéo locale — z-50 pour être au-dessus de tout -->
+            <div id="localVideoContainer" class="absolute bottom-24 right-6 w-32 h-48 sm:w-48 sm:h-64 bg-gray-800 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl transition-all duration-300 hover:scale-105 z-50">
                 <video id="localVideo" class="w-full h-full object-cover" autoplay playsinline muted></video>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
             </div>
         </div>
 
         <!-- Contrôles -->
-        <div class="absolute bottom-0 w-full z-30 bg-gradient-to-t from-gray-900 to-transparent pb-8 pt-12 flex justify-center items-center gap-6">
-            <button id="btnAudio" class="w-14 h-14 bg-gray-800/80 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors shadow-lg border border-white/10">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path></svg>
+        <div class="absolute bottom-0 w-full z-40 bg-gradient-to-t from-gray-900 to-transparent pb-8 pt-12 flex justify-center items-center gap-4 sm:gap-6 px-4">
+            <button id="btnAudio" class="w-12 h-12 sm:w-14 sm:h-14 bg-gray-800/80 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-all shadow-lg border border-white/10">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path></svg>
             </button>
-            <button id="btnVideo" class="w-14 h-14 bg-gray-800/80 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors shadow-lg border border-white/10">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
+            <button id="btnVideo" class="w-12 h-12 sm:w-14 sm:h-14 bg-gray-800/80 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-all shadow-lg border border-white/10">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg>
             </button>
             
-            <!-- Bouton Chat — contrôlé par JS pur, sans Alpine -->
-            <button id="btnChatToggle" class="w-14 h-14 bg-gray-800/80 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors shadow-lg border border-white/10 relative">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"></path></svg>
+            <button id="btnChatToggle" class="w-12 h-12 sm:w-14 sm:h-14 bg-gray-800/80 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-all shadow-lg border border-white/10 relative">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"></path></svg>
                 <span id="chatBadge" class="hidden absolute top-0 right-0 w-3.5 h-3.5 bg-red-500 border-2 border-gray-900 rounded-full"></span>
             </button>
             
-            <button id="btnManualCall" onclick="window.startCallManually()" class="w-14 h-14 bg-green-600/90 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-green-500 transition-colors shadow-lg shadow-green-900/20 border border-white/10" title="Forcer l'appel (Mode manuel)">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+            <button id="btnManualCall" onclick="window.startCallManually()" class="w-12 h-12 sm:w-14 sm:h-14 bg-green-600/90 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-green-500 transition-all shadow-lg shadow-green-900/20 border border-white/10" title="Forcer l'appel (Mode manuel)">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
             </button>
 
-            <form action="{{ route('dashboard') }}" method="GET" class="ml-4">
-                <button type="submit" class="w-14 h-14 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg shadow-red-900/20">
-                    <svg class="w-6 h-6 transform rotate-[135deg]" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+            <form action="{{ route('dashboard') }}" method="GET" class="">
+                <button type="submit" class="w-12 h-12 sm:w-14 sm:h-14 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-all shadow-lg shadow-red-900/20">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6 transform rotate-[135deg]" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
                 </button>
             </form>
         </div>
@@ -105,7 +105,7 @@
             // Monitoring de la connexion Echo
             window.Echo.connector.pusher.connection.bind('state_change', (states) => {
                 console.log(` Echo State: ${states.current}`);
-                if (states.current === 'connecting') statusBadge.innerHTML = 'Connexion au serveur...';
+                if (states.current === 'connected') statusBadge.innerHTML = 'Connexion au serveur...';
                 if (states.current === 'unavailable') statusBadge.innerHTML = 'Serveur indisponible ❌';
             });
 
@@ -176,13 +176,13 @@
             channel.here((users) => {
                 console.log(` ${users.length} dans le salon.`);
                 // Si on rejoint et qu il y a deja quelqu un, on initie l'appel
-                if (users.length > 1 && !callStarted) {
+                if (users.lenhestartCallregth > 1 && !callStarted) {
                     console.log('initie lappel');
-                    startCall(); 
                 }
             })
             .joining((user) => {
                 console.log(`${user.name} a rejoint. attends son initiation.`);
+                startCall(); 
             })
             .leaving((user) => {
                 console.log(`${user.name} a quitté.`);
@@ -255,7 +255,18 @@
 
                 peerConnection.ontrack = (event) => {
                     console.log("Flux distant reçu !");
-                    remoteVideo.srcObject = event.streams[0];
+                    if (event.streams && event.streams[0]) {
+                        remoteVideo.srcObject = event.streams[0];
+                    } else {
+                        console.error("Aucun flux trouvé dans l'événement ontrack");
+                    }
+                    
+                    // S'assurer que la vidéo locale reste visible même quand le flux distant arrive
+                    const localContainer = document.getElementById('localVideoContainer');
+                    if (localContainer) {
+                        localContainer.style.display = 'block';
+                        localContainer.style.zIndex = '50';
+                    }
                 };
 
                 peerConnection.onconnectionstatechange = () => {
