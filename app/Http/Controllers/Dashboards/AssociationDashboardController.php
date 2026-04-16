@@ -17,7 +17,11 @@ class AssociationDashboardController extends Controller
                           $q->whereIn('status', ['accepted', 'attended'])->with('patient.user');
                       }])
                       ->withCount(['participations', 'participations as validated_count' => fn($q) => $q->where('is_validated', true)])
-                      ->orderByDesc('scheduled_at')
+                      ->orderByRaw("CASE 
+                          WHEN scheduled_at >= NOW() THEN 1 
+                          ELSE 2 
+                      END ASC")
+                      ->orderBy('scheduled_at', 'asc')
                       ->get()
             : collect();
 

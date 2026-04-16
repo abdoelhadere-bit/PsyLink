@@ -9,7 +9,18 @@ class ProfessionalDashboardController extends Controller
 {
     public function __invoke()
     {
-        $appointments = Appointment::with('patient.user')->where('professional_id', auth()->user()->professional->id)->get();
+        $appointments = Appointment::with('patient.user')
+            ->where('professional_id', auth()->user()->professional->id)
+            ->orderByRaw("CASE 
+                WHEN status = 'in_progress' THEN 1 
+                WHEN status = 'pending' THEN 2
+                WHEN status = 'paid' OR status = 'accepted' THEN 3
+                WHEN status = 'waiting_payment' THEN 4
+                WHEN status = 'completed' THEN 5
+                ELSE 6 
+            END ASC")
+            ->orderBy('scheduled_at', 'asc')
+            ->get();
         
         if (auth()->user()->professional->is_valid) {
             return view('dashboard.professional', compact('appointments'));
