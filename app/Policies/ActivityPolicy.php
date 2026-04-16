@@ -8,6 +8,11 @@ use App\Models\User;
 class ActivityPolicy
 {
     
+    public function create(User $user): bool
+    {
+        return $user->role === 'association';
+    }
+
     public function delete(User $user, Activity $activity): bool
     {
         return $user->role === 'association'

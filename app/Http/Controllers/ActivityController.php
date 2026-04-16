@@ -26,7 +26,7 @@ class ActivityController extends Controller
 
     public function store(StoreActivityRequest $request)
     {
-        // Gate::authorize('create');
+        Gate::authorize('create', Activity::class);
 
         Activity::create([
             'association_id'       => $request->association_id,

@@ -28,6 +28,16 @@ class User extends Authenticatable
         'is_anonymous',
     ];
 
+ 
+    public function getDisplayNameAttribute(): string
+    {
+        if ($this->role === 'patient' && $this->is_anonymous) {
+            return "Patient Anonyme #" . ($this->patient?->id ?? '??');
+        }
+
+        return $this->name;
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

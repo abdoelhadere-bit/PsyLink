@@ -98,7 +98,7 @@
                         <tbody class="divide-y divide-gray-100">
                             @foreach($pendingParticipations as $p)
                             <tr>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $p->patient->user->name }}</td>
+                                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $p->patient->user->display_name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $p->activity->title }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $p->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="px-6 py-4 text-right flex justify-end gap-2">
@@ -171,7 +171,7 @@
                                     <div class="space-y-2">
                                         @foreach($activity->participations as $participation)
                                             <div class="flex items-center justify-between bg-gray-50 p-2 rounded-lg text-sm">
-                                                <span class="font-medium text-gray-800">{{ $participation->patient->user->name }}</span>
+                                                <span class="font-medium text-gray-800">{{ $participation->patient->user->display_name }}</span>
                                                 @if($participation->status === 'attended')
                                                     <span class="text-green-600 font-bold text-xs bg-green-100 px-2 py-1 rounded">Crédité ✓</span>
                                                 @else

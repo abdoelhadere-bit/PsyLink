@@ -21,7 +21,7 @@
                                 <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                                     <div class="flex justify-between items-start mb-2">
                                         <div>
-                                            <h3 class="text-lg font-semibold">Rendez-vous avec {{ $appointment->patient->user->name }}</h3>
+                                            <h3 class="text-lg font-semibold">Rendez-vous avec {{ $appointment->patient->user->display_name }}</h3>
                                             <p class="text-sm text-gray-600">{{ ucfirst($appointment->type) }} - {{ ucfirst($appointment->status) }}</p>
                                         </div>
                                         <span class="text-sm text-gray-500">{{ $appointment->scheduled_at->format('d/m/Y H:i') }}</span>
