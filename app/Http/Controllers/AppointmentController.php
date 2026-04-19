@@ -31,7 +31,7 @@ class AppointmentController extends Controller
             'patient_id' => auth()->user()->patient->id, 
             'professional_id' => $validated['professional_id'],
             'scheduled_at' => $validated['scheduled_at'],
-            'duration_minutes' => 45,
+            'duration_minutes' => 60,
             'type' => $validated['type'],
             'price' => $professional->hourly_rate,
             'status' => 'pending',

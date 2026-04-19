@@ -26,7 +26,7 @@ class StoreAppointmentRequest extends FormRequest
         return [
             'professional_id' => 'required|exists:professionals,id',
             'scheduled_at' => 'required|date|after:now',
-            'type' => 'required|string|in:chat,video',
+            'type' => 'required|string|in:video',
         ];
     }
 
@@ -49,8 +49,8 @@ class StoreAppointmentRequest extends FormRequest
                 $scheduledAt = Carbon::parse($this->scheduled_at);
                 $professionalId = $this->professional_id;
              
-                $startWindow = $scheduledAt->copy()->subMinutes(44);
-                $endWindow = $scheduledAt->copy()->addMinutes(44);
+                $startWindow = $scheduledAt->copy()->subMinutes(59);
+                $endWindow = $scheduledAt->copy()->addMinutes(59);
                 
                 $overlap = Appointment::where('professional_id', $professionalId)
                     ->whereNotIn('status', ['rejected', 'cancelled', 'completed']) 
