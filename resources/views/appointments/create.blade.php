@@ -26,7 +26,7 @@
                         </div>
                         <div class="ml-auto text-right">
                             <span class="block text-2xl font-black text-[var(--color-text-dark)] leading-none">{{ $professional->hourly_rate }}€</span>
-                            <span class="text-xs text-gray-500 font-medium uppercase tracking-wider">/ 45 min</span>
+                            <span class="text-xs text-gray-500 font-medium uppercase tracking-wider">/ 1 h</span>
                         </div>
                     </div>
 
@@ -38,29 +38,16 @@
                             <!-- Type de consultation -->
                             <div>
                                 <label class="block text-sm font-bold text-[var(--color-text-dark)] mb-3">Format de la séance</label>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <label class="group relative flex cursor-pointer rounded-2xl border-2 border-gray-100 bg-white p-4 shadow-sm focus:outline-none hover:border-[var(--color-primary)] hover:bg-blue-50/20 transition-all duration-300">
+                                <div class="grid grid-cols-1 gap-4">
+                                    <label class="group relative flex cursor-pointer rounded-2xl border-2 border-[var(--color-primary)] bg-[var(--color-primary)]/5 p-4 shadow-sm focus:outline-none transition-all duration-300">
                                         <input type="radio" name="type" value="video" class="peer sr-only" checked>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col w-full">
                                             <span class="block text-base font-bold text-[var(--color-text-dark)] mb-1 flex items-center gap-2">
                                                 <div class="p-1.5 bg-blue-100 rounded-lg text-blue-600"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path></svg></div>
-                                                Téléconsultation
+                                                Téléconsultation (Appel Vidéo)
                                             </span>
                                             <span class="block text-xs text-gray-500 leading-relaxed">Entretien vidéo sécurisé via notre plateforme.</span>
                                         </div>
-                                        <div class="absolute -inset-px rounded-2xl border-2 border-transparent peer-checked:border-[var(--color-primary)] peer-checked:bg-[var(--color-primary)]/5 pointer-events-none transition-all duration-300" aria-hidden="true"></div>
-                                    </label>
-                                    
-                                    <label class="group relative flex cursor-pointer rounded-2xl border-2 border-gray-100 bg-white p-4 shadow-sm focus:outline-none hover:border-[var(--color-primary)] hover:bg-blue-50/20 transition-all duration-300">
-                                        <input type="radio" name="type" value="chat" class="peer sr-only">
-                                        <div class="flex flex-col">
-                                            <span class="block text-base font-bold text-[var(--color-text-dark)] mb-1 flex items-center gap-2">
-                                                <div class="p-1.5 bg-green-100 rounded-lg text-green-600"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path></svg></div>
-                                                Chat écrit
-                                            </span>
-                                            <span class="block text-xs text-gray-500 leading-relaxed">Échange par messages instantanés en direct.</span>
-                                        </div>
-                                        <div class="absolute -inset-px rounded-2xl border-2 border-transparent peer-checked:border-[var(--color-primary)] peer-checked:bg-[var(--color-primary)]/5 pointer-events-none transition-all duration-300" aria-hidden="true"></div>
                                     </label>
                                 </div>
                                 @error('type')
@@ -71,18 +58,48 @@
                             <!-- Date et Heure -->
                             <div>
                                 <label for="scheduled_at" class="block text-sm font-bold text-[var(--color-text-dark)] mb-3">Choix du créneau</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                        </div>
+                                        <input type="date" 
+                                               id="appointment_date" 
+                                               class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] block pl-10 p-4 text-base transition-colors" 
+                                               min="{{ now()->format('Y-m-d') }}"
+                                               value="{{ old('scheduled_at') ? explode('T', old('scheduled_at'))[0] : '' }}">
                                     </div>
-                                    <input type="datetime-local" 
-                                           name="scheduled_at" 
-                                           id="scheduled_at" 
-                                           required 
-                                           class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] block pl-10 p-4 text-base transition-colors" 
-                                           min="{{ now()->subMinutes(15)->format('Y-m-d\TH:i') }}">
+                                    <div class="relative">
+                                        <select id="appointment_time" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] block px-4 py-4 text-base transition-colors">
+                                            <option value="">Heure</option>
+                                            @foreach(['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'] as $time)
+                                                <option value="{{ $time }}" {{ (old('scheduled_at') && substr(explode('T', old('scheduled_at'))[1] ?? '', 0, 5) == $time) ? 'selected' : '' }}>{{ $time }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                <p class="text-xs text-gray-500 mt-2 italic">Pour vos tests, vous pouvez sélectionner une heure immédiate.</p>
+                                <input type="hidden" name="scheduled_at" id="scheduled_at" required value="{{ old('scheduled_at') }}">
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const dateInput = document.getElementById('appointment_date');
+                                        const timeInput = document.getElementById('appointment_time');
+                                        const scheduledAtInput = document.getElementById('scheduled_at');
+
+                                        function updateScheduledAt() {
+                                            if (dateInput.value && timeInput.value) {
+                                                scheduledAtInput.value = dateInput.value + 'T' + timeInput.value;
+                                            } else {
+                                                scheduledAtInput.value = '';
+                                            }
+                                        }
+
+                                        dateInput.addEventListener('change', updateScheduledAt);
+                                        timeInput.addEventListener('change', updateScheduledAt);
+                                    });
+                                </script>
+
+                                <p class="text-xs text-gray-500 mt-2 italic">Sélectionnez la date et l'heure de votre consultation.</p>
                                 @error('scheduled_at')
                                     <p class="text-sm text-red-500 mt-2 flex items-center"><svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> {{ $message }}</p>
                                 @enderror
