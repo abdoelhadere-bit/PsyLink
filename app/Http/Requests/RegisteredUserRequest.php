@@ -26,6 +26,7 @@ class RegisteredUserRequest extends FormRequest
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'required|in:patient,professional,association',
+            'city' => 'nullable|string|max:255',
         ];
     }
 }

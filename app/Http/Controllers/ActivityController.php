@@ -8,21 +8,58 @@ use App\Models\Participation;
 use Illuminate\Http\Request;
 use App\Policies\ActivityPolicy;
 use Illuminate\Support\Facades\Gate;
+use App\Services\NotificationService;
+
 
 class ActivityController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $activities = Activity::with('association')->orderBy('scheduled_at', 'asc')->get();
         $userParticipations = [];
-
+        
+        //Creer un tableu pour les id  des activites et leurs status
         if (auth()->check() && auth()->user()->role === 'patient') {
             $userParticipations = auth()->user()->patient->activities->pluck('pivot.status', 'id')->toArray();
         }
 
-        return view('activities.index', compact('activities', 'userParticipations'));
-    } 
+        // Ordre de priorité : accepted > pending > attended > available 
+        $statusOrder = ['accepted' => 0, 'pending' => 1, 'attended' => 2, 'rejected' => 99];
+
+        $activities = $activities->sortBy(function ($activity) use ($userParticipations, $statusOrder) {
+            $status = $userParticipations[$activity->id] ?? 'available';
+            if ($status === 'available') return 3;
+            return $statusOrder[$status] ?? 99; 
+        })->values();
+
+        // Filtre par texte et ville
+        $search = $request->query('search');
+        $city = $request->query('city');
+        
+        if ($search) {
+            $activities = $activities->filter(fn($a) => 
+                str_contains(strtolower($a->title), strtolower($search)) || 
+                str_contains(strtolower($a->description), strtolower($search))
+            );
+        }
+        
+        if ($city) {
+            $activities = $activities->filter(fn($a) => $a->city === $city);
+        }
+
+        // Filtre par statut
+        $filter = $request->query('filter');
+        if ($filter && $filter !== 'all') {
+            if ($filter === 'available') {
+                $activities = $activities->filter(fn($a) => !isset($userParticipations[$a->id]));
+            } else {
+                $activities = $activities->filter(fn($a) => ($userParticipations[$a->id] ?? null) === $filter);
+            }
+        }
+
+        return view('activities.index', compact('activities', 'userParticipations', 'filter', 'search', 'city'));
+    }
 
     public function store(StoreActivityRequest $request)
     {
@@ -33,8 +70,10 @@ class ActivityController extends Controller
             'title'                => $request->title,
             'description'          => $request->description,
             'type'                 => $request->type,
+            'city'                 => $request->city,
             'scheduled_at'         => $request->scheduled_at,
             'max_participants'     => $request->max_participants,
+            'available_places'     => $request->max_participants,
             'free_sessions_earned' => $request->free_sessions_earned,
         ]);
 
@@ -78,6 +117,16 @@ class ActivityController extends Controller
             'is_validated' => false,
         ]);
 
+        // E-mail à l'association
+        $associationUser = $activity->association->user ?? null;
+        if ($associationUser) {
+            NotificationService::sendEmail(
+                $associationUser,
+                'Nouvelle demande de participation',
+                "Bonjour,\n\nLe patient {$patient->user->name} souhaite rejoindre votre mission solidaire \"{$activity->title}\".\n\nConnectez-vous à votre espace pour accepter ou refuser cette demande."
+            );
+        }
+
         return back()->with('success', 'Votre demande de participation a été envoyée à l\'association !');
     }
 
@@ -95,12 +144,23 @@ class ActivityController extends Controller
             }
 
             $participation->update(['status' => 'accepted', 'is_validated' => true]);
-            
-            return back()->with('success', 'Participation acceptée ! En attente de réalisation.');
+            $activity->decrement('available_places');
+
+            // E-mail au patient : participation acceptée
+            NotificationService::sendEmail(
+                $participation->patient->user,
+                'Votre participation a été acceptée !',
+                "Bonjour {$participation->patient->user->name},\n\nVotre demande de participation à la mission solidaire \"{$activity->title}\" a été acceptée.\n\u00c0 très bientôt !"
+            );
+
+            return back()->with('success', 'Participation acceptée ! Une place a été réservée.');
 
         } elseif ($action === 'reject') {
+            if ($participation->status === 'accepted') {
+                $activity->increment('available_places');
+            }
             $participation->update(['status' => 'rejected', 'is_validated' => false]);
-            return back()->with('success', 'Participation refusée.');
+            return back()->with('success', 'Participation refusée. La place a été libérée.');
             
         } elseif ($action === 'mark_present') {
             $participation->update(['status' => 'attended']);

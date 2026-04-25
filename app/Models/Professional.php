@@ -2,21 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 
-class Professional extends User
+class Professional extends Model
 {
     protected $table = 'professionals';
     protected $fillable = [
         'user_id',
         'specialty',
-        'bio',
         'is_valid',
         'hourly_rate',
+        'accepts_credits',
     ];
 
     protected $casts = [
         'is_valid' => 'boolean',
         'hourly_rate' => 'decimal:2',
+        'accepts_credits' => 'boolean',
     ];
 
     public function user()

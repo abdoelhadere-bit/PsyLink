@@ -24,7 +24,7 @@ class ReviewPolicy
             return false;
         }
 
-        if ($appointment->reviews()->where('reviewer_id', $user->id)->exists()) {
+        if ($appointment->review()->exists()) {
             return false;
         }
 

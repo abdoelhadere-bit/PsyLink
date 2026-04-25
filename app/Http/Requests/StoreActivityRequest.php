@@ -26,6 +26,7 @@ class StoreActivityRequest extends FormRequest
             'title'                => 'required|string|min:5|max:150',
             'description'          => ['required', 'string', 'min:20'],
             'type'                 => ['nullable', 'string', 'max:80'],
+            'city'                 => ['required', 'string', 'max:100'],
             'scheduled_at'         => ['required', 'date', 'after:' . now()->addHour()->toDateTimeString()],
             'max_participants'     => ['required', 'integer', 'min:2', 'max:50'],
             'free_sessions_earned' => ['required', 'integer', 'min:0', 'max:5']

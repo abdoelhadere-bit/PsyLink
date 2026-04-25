@@ -23,7 +23,6 @@ class ReviewController extends Controller
         \Illuminate\Support\Facades\Gate::authorize('create', [\App\Models\Review::class, $appointment]);
         $review = Review::create([
             'appointment_id' => $validated['appointment_id'],
-            'reviewer_id' => auth()->id(),
             'rating' => $validated['rating'],
             'comment' => $validated['comment'],
         ]);

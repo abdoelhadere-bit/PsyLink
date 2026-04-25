@@ -14,6 +14,7 @@ use App\Http\Controllers\Dashboards\PatientDashboardController;
 use App\Http\Controllers\Dashboards\ProfessionalDashboardController;
 use App\Http\Controllers\Dashboards\AssociationDashboardController;
 use App\Http\Controllers\Dashboards\AdminDashboardController;
+use App\Services\NotificationService;
 
 
 class DashboardController extends Controller
@@ -36,8 +37,18 @@ class DashboardController extends Controller
 
         $pro->is_valid = !$pro->is_valid;
         $pro->save();
-        
-        $action = $pro->is_valid ? 'validé et autorisé' : 'suspendu et bloqué';
-        return redirect()->route('dashboard')->with('success', "Le compte du praticien a été $action avec succès.");
+
+        if ($pro->is_valid) {
+            // E-mail de validation au praticien
+            NotificationService::sendEmail(
+                $pro->user,
+                'Votre compte PsyLink a été validé !',
+                "Bonjour Dr. {$pro->user->name},\n\nFélicitations ! Votre compte professionnel sur PsyLink vient d'être validé par notre équipe.\n\nPour être visible dans l'annuaire, merci de compléter votre profil (photo, biographie, tarif) dès maintenant."
+            );
+            return redirect()->route('dashboard')
+                ->with('success', "Le compte du praticien a été validé. Un e-mail lui a été envoyé pour compléter son profil.");
+        }
+
+        return redirect()->route('dashboard')->with('success', "Le compte du praticien a été suspendu et bloqué.");
     }
 }

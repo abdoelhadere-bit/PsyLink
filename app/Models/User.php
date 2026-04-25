@@ -25,18 +25,11 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'is_anonymous',
+        'city',
+        'photo',
+        'phone',
+        'bio',
     ];
-
- 
-    public function getDisplayNameAttribute(): string
-    {
-        if ($this->role === 'patient' && $this->is_anonymous) {
-            return "Patient Anonyme #" . ($this->patient?->id ?? '??');
-        }
-
-        return $this->name;
-    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -58,7 +51,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_anonymous' => 'boolean',
         ];
     }
 

@@ -11,10 +11,18 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Professional;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    $recommendedPros = Professional::with('user')
+        ->where('is_valid', true)
+        ->take(3)
+        ->get();
+        
+    return view('welcome', [
+        'recommendedPros' => $recommendedPros
+    ]);
 });
 
 Route::get('/login', function () {
@@ -40,7 +48,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/about', function () {
     return view('about');
-})->middleware('auth')->name('about');  
+})->name('about');  
 
 Route::get('/professionals', [ProfessionalController::class, 'index'])->name('professionals.index');
 
@@ -86,7 +94,5 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 
-Route::get('/test', function(){
-    return view('auth.test');
-});
+
 

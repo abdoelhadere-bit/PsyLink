@@ -2,13 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 
-class Patient extends User
+class Patient extends Model
 {
     protected $table = 'patients';
     protected $fillable = [
         'user_id',
-        'credits'
+        'credits',
+        'birth_date',
+        'gender',
+    ];
+
+    protected $casts = [
+        'birth_date' => 'date',
     ];
 
     public function user()

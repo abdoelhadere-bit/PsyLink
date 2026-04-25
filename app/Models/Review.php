@@ -8,7 +8,6 @@ class Review extends Model
 {
     protected $fillable = [
         'appointment_id',
-        'reviewer_id',
         'rating',
         'comment',
     ];
@@ -20,10 +19,5 @@ class Review extends Model
     public function appointment()
     {
         return $this->belongsTo(Appointment::class);
-    }
-
-    public function reviewer()
-    {
-        return $this->belongsTo(User::class, 'reviewer_id');
     }
 }

@@ -12,14 +12,17 @@ class Activity extends Model
         'title',
         'description',
         'type',
+        'city',
         'scheduled_at',
         'max_participants',
+        'available_places',
         'free_sessions_earned',
     ];
 
     protected $casts = [
         'free_sessions_earned' => 'integer',
         'max_participants'     => 'integer',
+        'available_places'     => 'integer',
         'scheduled_at'         => 'datetime',
     ];
 
@@ -41,7 +44,7 @@ class Activity extends Model
    
     public function isFull(): bool
     {
-        return $this->participations()->where('is_validated', true)->count() >= $this->max_participants;
+        return $this->available_places <= 0;
     }
 
    

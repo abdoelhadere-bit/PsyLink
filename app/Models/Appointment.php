@@ -14,8 +14,6 @@ class Appointment extends Model
         'scheduled_at',
         'duration_minutes',
         'price',
-        'topic',
-        'notes',
     ];
 
     protected $casts = [
@@ -32,14 +30,11 @@ class Appointment extends Model
         return $this->belongsTo(Professional::class);
     }
 
-    public function messages()
-    {
-        return $this->hasMany(Message::class);
-    }
 
-    public function reviews()
+
+    public function review()
     {
-        return $this->hasMany(Review::class);
+        return $this->hasOne(Review::class);
     }
 
     public function payment()
@@ -54,6 +49,6 @@ class Appointment extends Model
         }
 
         $allowedStartTime = $this->scheduled_at->copy()->subMinutes(15);
-        return now()->isAfter($allowedStartTime) || now()->isSameAs($allowedStartTime);
+        return now()->greaterThanOrEqualTo($allowedStartTime);
     }
 }

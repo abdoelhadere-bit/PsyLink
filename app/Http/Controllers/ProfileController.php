@@ -20,14 +20,31 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'name'       => ['required', 'string', 'max:255'],
+            'email'      => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'city'       => ['nullable', 'string', 'max:255'],
+            'phone'      => ['nullable', 'string', 'max:20'],
+            'birth_date' => ['nullable', 'date'],
+            'gender'     => ['nullable', 'string', 'in:male,female,other'],
+            'photo'      => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
-        $user->fill($validated);
+        // Upload de la photo
+        if ($request->hasFile('photo')) {
+            if ($user->photo) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->photo);
+            }
+            $path = $request->file('photo')->store('photos/profiles', 'public');
+            $user->photo = $path;
+        }
+
+        $user->fill(\Illuminate\Support\Arr::except($validated, ['photo']));
 
         if ($user->role === 'patient') {
-            $user->is_anonymous = $request->has('is_anonymous');
+            $patientData = $request->validate([
+                'bio' => ['nullable', 'string', 'max:1000'],
+            ]);
+            $user->patient->update($patientData);
         }
 
         if ($user->isDirty('email')) {
