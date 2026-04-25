@@ -9,7 +9,7 @@
             </div>
             <h2 class="text-3xl font-extrabold text-gray-900">Paiement Sécurisé</h2>
             <p class="mt-2 text-sm text-gray-600">
-                Séance avec Dr. {{ $appointment->professional->user->name }}
+                Séance avec {{ str_starts_with($appointment->professional->user->name, 'Dr.') ? '' : 'Dr. ' }}{{ $appointment->professional->user->name }}
             </p>
         </div>
 
@@ -28,7 +28,7 @@
                     </div>
                 </div>
 
-                @if(auth()->user()->patient->credits > 0)
+                @if(auth()->user()->patient->credits > 0 && $appointment->professional->accepts_credits)
                     <div class="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl">
                         <p class="text-sm font-bold text-red-600 mb-3 flex items-center gap-2">
                            ❤️ Vous possédez {{ auth()->user()->patient->credits }} cœurs solidaires.
@@ -36,7 +36,7 @@
                         <form action="{{ route('checkout.process', $appointment->id) }}" method="POST">
                             @csrf
                             <input type="hidden" name="use_credits" value="1">
-                            <button class="w-full !bg-red-500 !text-white !border-none hover:bg-red-600">
+                            <button class="w-full rounded-xl !bg-red-500 !text-white !border-none hover:bg-red-600">
                                 Payer avec 1 Cœur Solidaire
                             </button>
                         </form>

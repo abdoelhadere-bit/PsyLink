@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Soutien Psy') }}</title>
+        <title>{{ config('app.name', 'PsyLink') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600|poppins:400,500,600,700&display=swap" rel="stylesheet" />
@@ -34,7 +34,7 @@
                         <div class="hidden sm:-my-px sm:ml-10 sm:flex sm:space-x-8">
                             <a href="{{route('professionals.index')}}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">Trouver un pro</a>
                             <a href="{{route('activities.index')}}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">Trouver une activite</a>
-                            <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">À propos</a>
+                            <a href="{{ route('about') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">À propos</a>
                         </div>
                     </div>
                     <div class="hidden sm:flex sm:items-center sm:ml-6 space-x-4">

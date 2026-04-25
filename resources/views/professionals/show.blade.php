@@ -28,15 +28,14 @@
                 
                 <div class="flex flex-col md:flex-row gap-8 items-start">
                     <div class="flex-shrink-0 relative">
-                        <img class="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover shadow-sm ring-4 ring-white" src="https://ui-avatars.com/api/?name=Dr+Alice+B&background=e0f2fe&color=0369a1&size=200" alt="Dr Alice B."/>
-                        <div class="absolute -bottom-2 -right-2 bg-green-500 w-5 h-5 rounded-full border-4 border-white" title="En ligne"></div>
+                        <x-pro-avatar :user="$professional->user" size="xl" />
                     </div>
                     
                     <div class="flex-1 w-full">
                         <div class="flex flex-col md:flex-row justify-between items-start gap-4">
                             <div>
                                 <div class="flex items-center gap-2 mb-1">
-                                    <h1 class="text-3xl font-bold text-[var(--color-text-dark)]">Dr. {{$professional->user->name}}</h1>
+                                    <h1 class="text-3xl font-bold text-[var(--color-text-dark)]">{{ str_starts_with($professional->user->name, 'Dr.') ? '' : 'Dr. ' }}{{$professional->user->name}}</h1>
                                     <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20" title="Profil vérifié certifié"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                                 </div>
                                 <p class="text-lg font-medium text-[var(--color-primary)] mb-2">{{$professional->specialty}}</p>
@@ -50,7 +49,7 @@
                             
                             <div class="w-full md:w-auto flex flex-col items-center md:items-end p-4 bg-gray-50 rounded-2xl border border-gray-100">
                                 <p class="text-sm text-[var(--color-text-gray)] mb-1">Tarif consultation</p>
-                                <p class="text-3xl font-bold text-[var(--color-text-dark)] mb-4">{{$professional->hourly_rate}}€ <span class="text-sm font-normal text-gray-500">/ 45 min</span></p>
+                                <p class="text-3xl font-bold text-[var(--color-text-dark)] mb-4">{{$professional->hourly_rate}}€ <span class="text-sm font-normal text-gray-500">/ 1 heure</span></p>
                                 <a href="{{route('appointments.create', $professional->id)}}" class="w-full text-center inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold bg-[var(--color-primary)] text-white hover:bg-blue-600 shadow-md hover:shadow-lg transition-all transform active:scale-95">
                                     Demander une séance
                                 </a>
@@ -74,9 +73,7 @@
                     <button @click="tab = 'about'" :class="tab === 'about' ? 'text-[var(--color-primary)] border-[var(--color-primary)]' : 'border-transparent text-[var(--color-text-gray)] hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors" aria-current="page">
                         À propos
                     </button>
-                    <button @click="tab = 'disponibilites'" :class="tab === 'disponibilites' ? 'text-[var(--color-primary)] border-[var(--color-primary)]' : 'border-transparent text-[var(--color-text-gray)] hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                        Disponibilités
-                    </button>
+
                     <button @click="tab = 'avis'" :class="tab === 'avis' ? 'text-[var(--color-primary)] border-[var(--color-primary)]' : 'border-transparent text-[var(--color-text-gray)] hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center gap-2">
                         Avis <span class="bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{$totalReviews}}</span>
                     </button>
@@ -119,6 +116,7 @@
                 </div>
                 
                 <!-- Section solidarié informatif -->
+                @if($professional->accepts_credits)
                 <x-card class="bg-gradient-to-r from-orange-50 to-orange-100 border-orange-200 p-6 flex flex-col sm:flex-row items-center gap-6 mt-8">
                     <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
                         <svg class="w-8 h-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
@@ -128,6 +126,7 @@
                         <p class="text-sm text-orange-700">Ce professionnel participe au programme de consultations solidaires. Si votre dossier est validé par la plateforme, vous pouvez bénéficier de séances gratuites ou à tarif réduit avec ce praticien.</p>
                     </div>
                 </x-card>
+                @endif
 
                 <!-- Zone de Signalement -->
                 @auth
@@ -214,9 +213,9 @@
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center gap-2">
                                         <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                            <span class="text-gray-600">{{ substr($review->reviewer->name, 0, 1) }}</span>
+                                            <span class="text-gray-600">{{ substr($review->appointment->patient->user->name, 0, 1) }}</span>
                                         </div>
-                                        <span class="font-bold text-gray-800">{{ $review->reviewer->name }}</span>
+                                        <span class="font-bold text-gray-800">{{ $review->appointment->patient->user->name }}</span>
                                     </div>
                                     <div class="flex items-center gap-1">
                                         @for($i = 1; $i <= $review->rating; $i++)

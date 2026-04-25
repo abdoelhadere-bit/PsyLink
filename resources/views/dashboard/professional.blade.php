@@ -5,12 +5,23 @@
                 <div class="p-6 text-gray-900">
                     <x-flash-messages />
 
+                    <!-- Header praticien -->
+                    <div class="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
+                        <x-pro-avatar :user="auth()->user()" size="lg" />
+                        <div>
+                            <h1 class="text-2xl font-extrabold text-slate-900">{{ str_starts_with(auth()->user()->name, 'Dr.') ? '' : 'Dr. ' }}{{ auth()->user()->name }}</h1>
+                            <p class="text-sm text-slate-500">{{ auth()->user()->professional->specialty ?? 'Spécialité non renseignée' }} &bull; {{ auth()->user()->city ?? '' }}</p>
+                        </div>
+                        <div class="ml-auto">
+                            <a href="{{ route('professional.profile.edit') }}" class="px-4 py-2 bg-gray-800 text-white text-sm font-semibold rounded-lg hover:bg-gray-700 shadow flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                Modifier mon profil
+                            </a>
+                        </div>
+                    </div>
+
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold">Mes Rendez-vous</h2>
-                        <a href="{{ route('professional.profile.edit') }}" class="px-4 py-2 bg-gray-800 text-white text-sm font-semibold rounded-lg hover:bg-gray-700 shadow flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                            Modifier mon profil
-                        </a>
                     </div>
                     
                     @if($appointments->isEmpty())
@@ -21,7 +32,7 @@
                                 <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                                     <div class="flex justify-between items-start mb-2">
                                         <div>
-                                            <h3 class="text-lg font-semibold">Rendez-vous avec {{ $appointment->patient->user->display_name }}</h3>
+                                            <h3 class="text-lg font-semibold">Rendez-vous avec {{ $appointment->patient->user->name }}</h3>
                                             <p class="text-sm text-gray-600">{{ ucfirst($appointment->type) }} - {{ ucfirst($appointment->status) }}</p>
                                         </div>
                                         <span class="text-sm text-gray-500">{{ $appointment->scheduled_at->format('d/m/Y H:i') }}</span>

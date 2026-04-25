@@ -37,6 +37,13 @@
                                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+                        <div class="col-span-1 sm:col-span-2">
+                            <label class="block text-sm font-medium text-[var(--color-text-dark)] mb-1">Ville</label>
+                            <x-input type="text" name="city" required class="w-full bg-gray-50/50" placeholder="Paris, Lyon..." />
+                            @error('city')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-[var(--color-text-dark)] mb-1">Mot de passe</label>
                             <x-input type="password" name="password" required class="w-full bg-gray-50/50" placeholder="••••••••" />
@@ -83,18 +90,8 @@
                         </div>
                     </div>
 
-                    <!-- CGU & Anonymat -->
+                    <!-- CGU -->
                     <div class="space-y-4 pt-4 border-t border-[var(--color-border-light)]">
-                        <div id="patient-options" class="flex items-start">
-                            <div class="flex items-center h-5">
-                                <input id="anonymity" name="anonymity" type="checkbox" class="h-4 w-4 text-[var(--color-primary)] rounded border-gray-300">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="anonymity" class="font-medium text-[var(--color-text-dark)]">Je souhaite rester anonyme</label>
-                                <p class="text-[var(--color-text-gray)]">Mon vrai nom ne sera jamais affiché aux praticiens.</p>
-                            </div>
-                        </div>
-
                         <div class="flex items-start">
                             <div class="flex items-center h-5">
                                 <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 text-[var(--color-primary)] rounded border-gray-300">
@@ -184,17 +181,14 @@
                 document.getElementById('form-title').innerText = 'Inscription Professionnel';
                 document.getElementById('form-subtitle').innerText = 'Rejoignez notre réseau de praticiens validés.';
                 document.getElementById('pro-fields').classList.remove('hidden');
-                document.getElementById('patient-options').classList.add('hidden');
             } else if (role === 'patient') {
                 document.getElementById('form-title').innerText = 'Inscription Patient';
                 document.getElementById('form-subtitle').innerText = 'Quelques informations pour sécuriser votre accès.';
                 document.getElementById('pro-fields').classList.add('hidden');
-                document.getElementById('patient-options').classList.remove('hidden');
             } else if (role === 'association') {
                 document.getElementById('form-title').innerText = 'Inscription Association';
                 document.getElementById('form-subtitle').innerText = 'Quelques informations pour sécuriser votre accès.';
                 document.getElementById('pro-fields').classList.add('hidden');
-                document.getElementById('patient-options').classList.remove('hidden');
             }
         }
     </script>

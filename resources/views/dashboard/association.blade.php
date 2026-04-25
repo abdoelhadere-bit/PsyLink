@@ -62,6 +62,17 @@
                         <input id="type" name="type" type="text" value="{{ old('type') }}" placeholder="Ex: Écoute solidaire, Atelier bien-être..."
                             class="w-full rounded-xl border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-indigo-400 outline-none">
                     </div>
+                    {{-- Ville --}}
+                    <div>
+                        <label for="city" class="block text-sm font-medium text-gray-700 mb-1">Ville de la mission *</label>
+                        <select id="city" name="city" class="w-full rounded-xl border {{ $errors->has('city') ? 'border-red-400 bg-red-50' : 'border-gray-300' }} px-4 py-2.5 focus:ring-2 focus:ring-indigo-400 outline-none">
+                            <option value="">Sélectionnez une ville...</option>
+                            @foreach(['Casablanca', 'Rabat', 'Marrakech', 'Fès', 'Tanger', 'Agadir', 'Meknès', 'Oujda', 'Kénitra', 'Tétouan', 'Salé', 'El Jadida'] as $city)
+                                <option value="{{ $city }}" {{ old('city') == $city ? 'selected' : '' }}>{{ $city }}</option>
+                            @endforeach
+                        </select>
+                        @error('city') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                     {{-- Free Sessions Earned --}}
                     <div>
                         <label for="free_sessions_earned" class="block text-sm font-medium text-gray-700 mb-1">Séances Psy offertes en récompense *</label>
@@ -98,19 +109,19 @@
                         <tbody class="divide-y divide-gray-100">
                             @foreach($pendingParticipations as $p)
                             <tr>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $p->patient->user->display_name }}</td>
+                                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $p->patient->user->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $p->activity->title }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $p->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="px-6 py-4 text-right flex justify-end gap-2">
                                     <form method="POST" action="{{ route('participations.validate', $p->id) }}">
                                         @csrf
                                         <input type="hidden" name="action" value="accept">
-                                        <button type="submit" class="px-3 py-1.5 bg-green-500 text-white text-xs font-bold rounded-lg hover:bg-green-600">✓ Accepter</button>
+                                        <button type="submit" class="px-3 py-1.5 bg-green-500 text-white text-xs font-bold rounded-lg hover:bg-green-600">Accepter</button>
                                     </form>
                                     <form method="POST" action="{{ route('participations.validate', $p->id) }}">
                                         @csrf
                                         <input type="hidden" name="action" value="reject">
-                                        <button type="submit" class="px-3 py-1.5 border border-red-300 text-red-600 text-xs font-bold rounded-lg hover:bg-red-50">✕ Refuser</button>
+                                        <button type="submit" class="px-3 py-1.5 border border-red-300 text-red-600 text-xs font-bold rounded-lg hover:bg-red-50">Refuser</button>
                                     </form>
                                 </td>
                             </tr>
@@ -143,7 +154,7 @@
                                         <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">{{ $activity->type }}</span>
                                     @endif
                                     @if($activity->free_sessions_earned > 0)
-                                        <span class="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full border border-red-100 ml-1">🎁 +{{ $activity->free_sessions_earned }} séance(s)</span>
+                                        <span class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-100 ml-1">+{{ $activity->free_sessions_earned }} séance(s)</span>
                                     @endif
                                 </div>
                                 {{-- Badge statut date --}}
@@ -155,9 +166,12 @@
                             </div>
                             <p class="text-sm text-gray-500 line-clamp-2">{{ $activity->description }}</p>
                             <div class="flex items-center gap-4 text-xs text-gray-500">
-                                <span>📅 {{ $activity->scheduled_at ? $activity->scheduled_at->format('d/m/Y à H:i') : 'Date non définie' }}</span>
-                                <span>👥 {{ $activity->validated_count }}/{{ $activity->max_participants }} places</span>
-                                <span>⏳ {{ $activity->participations_count - $activity->validated_count }} en attente</span>
+                                <span>{{ $activity->scheduled_at ? $activity->scheduled_at->format('d/m/Y à H:i') : 'Date non définie' }}</span>
+                                @if($activity->city)
+                                    <span>{{ $activity->city }}</span>
+                                @endif
+                                <span>{{ $activity->validated_count }}/{{ $activity->max_participants }} places</span>
+                                <span>{{ $activity->participations_count - $activity->validated_count }} en attente</span>
                             </div>
                             {{-- Barre de progression des places --}}
                             <div class="w-full bg-gray-200 rounded-full h-1.5">
@@ -171,7 +185,7 @@
                                     <div class="space-y-2">
                                         @foreach($activity->participations as $participation)
                                             <div class="flex items-center justify-between bg-gray-50 p-2 rounded-lg text-sm">
-                                                <span class="font-medium text-gray-800">{{ $participation->patient->user->display_name }}</span>
+                                                <span class="font-medium text-gray-800">{{ $participation->patient->user->name }}</span>
                                                 @if($participation->status === 'attended')
                                                     <span class="text-green-600 font-bold text-xs bg-green-100 px-2 py-1 rounded">Crédité ✓</span>
                                                 @else
@@ -179,12 +193,12 @@
                                                         <form method="POST" action="{{ route('participations.validate', $participation->id) }}">
                                                             @csrf
                                                             <input type="hidden" name="action" value="mark_present">
-                                                            <button title="Présent (Accorder les crédits)" class="w-7 h-7 bg-green-100 text-green-600 rounded-md hover:bg-green-200 flex items-center justify-center font-bold">✓</button>
+                                                            <button title="Présent" class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded hover:bg-green-200 font-medium">Présent</button>
                                                         </form>
                                                         <form method="POST" action="{{ route('participations.validate', $participation->id) }}">
                                                             @csrf
                                                             <input type="hidden" name="action" value="mark_absent">
-                                                            <button title="Absent (Refuser les crédits)" class="w-7 h-7 bg-red-100 text-red-600 rounded-md hover:bg-red-200 flex items-center justify-center font-bold">✕</button>
+                                                            <button title="Absent" class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded hover:bg-red-200 font-medium">Absent</button>
                                                         </form>
                                                     </div>
                                                 @endif
@@ -201,7 +215,7 @@
                                     @csrf @method('DELETE')
                                     <button type="submit"
                                         class="w-full text-center text-xs text-red-500 hover:text-red-700 mt-2 transition">
-                                        🗑 Supprimer cette mission
+                                        Supprimer cette mission
                                     </button>
                                 </form>
                             @endif

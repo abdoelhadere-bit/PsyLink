@@ -1,268 +1,146 @@
 <x-app-layout>
-    <!-- 1. Hero Section -->
-    <section class="relative overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-32">
-        <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-            <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-blue-200 to-emerald-200 opacity-40 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
-        </div>
-        
+    <!-- 1. Hero Section (Medical, Clean, Search-focused) -->
+    <div class="bg-blue-50 py-16 lg:py-24 border-b border-blue-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
-                <div class="lg:col-span-6 text-center lg:text-left">
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--color-text-dark)] mb-6">
-                        Soutien psychologique à distance, <span class="text-[var(--color-primary)]">en toute confiance</span>
-                    </h1>
-                    <p class="text-lg sm:text-xl text-[var(--color-text-gray)] mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                        Consultez des professionnels certifiés par chat ou visioconférence, en toute confidentialité, avec paiement sécurisé ou accès solidaire.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <x-button variant="primary" class="w-full sm:w-auto !px-8 !py-4 text-base">Trouver un professionnel</x-button>
-                        <x-button variant="secondary" class="w-full sm:w-auto !px-8 !py-4 text-base">Créer un compte</x-button>
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                    Trouvez un professionnel de santé mentale et prenez rendez-vous en ligne
+                </h1>
+                <p class="text-lg text-gray-600 mb-8">
+                    Consultations en cabinet ou en téléconsultation. Simple, rapide et sécurisé.
+                </p>
+                
+                <!-- Search Bar Card -->
+                <form action="{{ route('professionals.index') }}" method="GET" class="bg-white p-3 rounded-2xl shadow-md border border-gray-200 flex flex-col sm:flex-row items-center gap-3">
+                    <div class="relative flex-1 w-full">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input type="text" name="search" class="block w-full pl-11 pr-3 py-4 border-none rounded-xl text-gray-900 placeholder-gray-500 hover:bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-lg transition-colors bg-gray-50/50" placeholder="Nom ou spécialité...">
                     </div>
                     
-                    <div class="mt-10 flex items-center justify-center lg:justify-start gap-4 text-sm text-[var(--color-text-gray)]">
-                        <div class="flex -space-x-2">
-                            <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://ui-avatars.com/api/?name=Marie+D&background=random" alt=""/>
-                            <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://ui-avatars.com/api/?name=Lucas+M&background=random" alt=""/>
-                            <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://ui-avatars.com/api/?name=Sophie+L&background=random" alt=""/>
+                    <div class="hidden sm:block w-px h-10 bg-gray-200"></div>
+                    
+                    <div class="relative flex-1 w-full">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </div>
-                        <p>Déjà <span class="font-semibold text-[var(--color-text-dark)]">250+</span> personnes accompagnées</p>
+                        <input type="text" name="city" class="block w-full pl-11 pr-3 py-4 border-none rounded-xl text-gray-900 placeholder-gray-500 hover:bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-lg transition-colors bg-gray-50/50" placeholder="Où (ex: Paris, Lyon)">
                     </div>
-                </div>
+
+                    <button type="submit" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-xl transition-colors duration-200 shadow-sm">
+                        Rechercher
+                    </button>
+                </form>
                 
-                <div class="hidden lg:block lg:col-span-6 relative mt-16 lg:mt-0">
-                    <div class="relative w-full h-[500px] rounded-[2rem] bg-gradient-to-br from-blue-50 to-emerald-50 overflow-hidden shadow-sm border border-[var(--color-border-light)] p-8 flex flex-col justify-center items-center">
-                        <!-- Abstract Mockup -->
-                        <div class="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 transform -rotate-2 hover:rotate-0 transition-transform duration-500">
-                            <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 rounded-full bg-blue-100 flex-shrink-0"></div>
-                                <div class="flex-1">
-                                    <div class="h-4 bg-gray-200 rounded w-24 mb-2"></div>
-                                    <div class="h-3 bg-gray-100 rounded w-32"></div>
-                                </div>
-                                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="h-3 bg-gray-100 rounded w-full"></div>
-                                <div class="h-3 bg-gray-100 rounded w-5/6"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="w-full max-w-sm bg-white rounded-2xl shadow-sm border border-gray-100 p-4 transform translate-x-8 opacity-90">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                </div>
-                                <div class="h-10 bg-gray-50 rounded-xl flex-1 px-3 py-2 flex items-center">
-                                    <div class="h-2 bg-gray-200 rounded w-20"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="mt-8 flex justify-center gap-4 flex-wrap text-sm text-blue-800 font-medium">
+                    <a href="{{ route('professionals.index', ['specialty' => 'psychologue']) }}" class="bg-white border border-blue-200 hover:border-blue-400 hover:bg-blue-50 px-4 py-2 rounded-full transition-colors shadow-sm">Psychologue</a>
+                    <a href="{{ route('professionals.index', ['specialty' => 'psychiatre']) }}" class="bg-white border border-blue-200 hover:border-blue-400 hover:bg-blue-50 px-4 py-2 rounded-full transition-colors shadow-sm">Psychiatre</a>
+                    <a href="{{ route('professionals.index', ['specialty' => 'therapeute']) }}" class="bg-white border border-blue-200 hover:border-blue-400 hover:bg-blue-50 px-4 py-2 rounded-full transition-colors shadow-sm">Thérapeute TCC</a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- 2. Section Avantages -->
-    <section class="py-16 bg-white border-y border-[var(--color-border-light)]">
+    <!-- 2. Section Avantages (Clean & Clinical) -->
+    <section class="py-16 bg-white border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <h2 class="text-2xl font-bold text-center text-gray-900 mb-12">Pourquoi utiliser PsyLink ?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <!-- Avantage 1 -->
-                <x-card class="bg-gray-50/50 hover:bg-white transition-colors">
-                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <div class="p-6">
+                    <div class="w-16 h-16 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-6 text-blue-600">
+                        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3">Confidentialité garantie</h3>
-                    <p class="text-[var(--color-text-gray)] text-sm leading-relaxed">Vos données et échanges sont entièrement chiffrés et protégés. Anonymat possible.</p>
-                </x-card>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Sécurité & Confidentialité</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Vos données médicales sont sécurisées et hébergées selon les normes de santé en vigueur.</p>
+                </div>
                 
                 <!-- Avantage 2 -->
-                <x-card class="bg-gray-50/50 hover:bg-white transition-colors">
-                    <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <div class="p-6">
+                    <div class="w-16 h-16 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-6 text-blue-600">
+                        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3">Professionnels validés</h3>
-                    <p class="text-[var(--color-text-gray)] text-sm leading-relaxed">Chaque praticien est vérifié manuellement par notre équipe (diplômes, expérience).</p>
-                </x-card>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Praticiens vérifiés</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Seuls les diplômes et l'identité des professionnels enregistrés sont certifiés par nos équipes.</p>
+                </div>
                 
                 <!-- Avantage 3 -->
-                <x-card class="bg-gray-50/50 hover:bg-white transition-colors">
-                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                <div class="p-6">
+                    <div class="w-16 h-16 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-6 text-blue-600">
+                        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3">Consultation facile</h3>
-                    <p class="text-[var(--color-text-gray)] text-sm leading-relaxed">Échangez via messagerie sécurisée ou lancez une visioconférence en un clic.</p>
-                </x-card>
-                
-                <!-- Avantage 4 -->
-                <x-card class="bg-gray-50/50 hover:bg-white transition-colors">
-                    <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Accès solidaire</h3>
-                    <p class="text-[var(--color-text-gray)] text-sm leading-relaxed">Un programme de bénévolat permet l'accès à des séances gratuites pour les plus démunis.</p>
-                </x-card>
-            </div>
-        </div>
-    </section>
-
-    <!-- 3. Section "Comment ça marche" -->
-    <section class="py-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4">Un accompagnement en 4 étapes</h2>
-                <p class="text-lg text-[var(--color-text-gray)] max-w-2xl mx-auto">Parcours simplifié pour vous concentrer sur l'essentiel : votre bien-être.</p>
-            </div>
-            
-            <div class="relative">
-                <!-- Ligne de connexion (Desktop) -->
-                <div class="hidden md:block absolute top-12 left-0 right-0 h-0.5 bg-gray-200" aria-hidden="true"></div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-                    <!-- Étape 1 -->
-                    <div class="relative text-center">
-                        <div class="w-24 h-24 mx-auto bg-white rounded-full border-4 border-blue-100 flex items-center justify-center shadow-sm relative z-10 mb-6">
-                            <span class="text-2xl font-bold text-[var(--color-primary)]">1</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-3">Trouver</h3>
-                        <p class="text-[var(--color-text-gray)] text-sm">Sélectionnez le professionnel qui vous correspond selon vos critères.</p>
-                    </div>
-                    
-                    <!-- Étape 2 -->
-                    <div class="relative text-center">
-                        <div class="w-24 h-24 mx-auto bg-white rounded-full border-4 border-emerald-100 flex items-center justify-center shadow-sm relative z-10 mb-6">
-                            <span class="text-2xl font-bold text-[var(--color-secondary)]">2</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-3">Réserver</h3>
-                        <p class="text-[var(--color-text-gray)] text-sm">Choisissez un créneau disponible et le type de consultation idéal (Chat ou Visio).</p>
-                    </div>
-                    
-                    <!-- Étape 3 -->
-                    <div class="relative text-center">
-                        <div class="w-24 h-24 mx-auto bg-white rounded-full border-4 border-blue-100 flex items-center justify-center shadow-sm relative z-10 mb-6">
-                            <span class="text-2xl font-bold text-[var(--color-primary)]">3</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-3">Régler</h3>
-                        <p class="text-[var(--color-text-gray)] text-sm">Paiement sécurisé ou accès gratuit via notre programme validé de bénévolat.</p>
-                    </div>
-                    
-                    <!-- Étape 4 -->
-                    <div class="relative text-center">
-                        <div class="w-24 h-24 mx-auto bg-white rounded-full border-4 border-emerald-100 flex items-center justify-center shadow-sm relative z-10 mb-6">
-                            <span class="text-2xl font-bold text-[var(--color-secondary)]">4</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-3">Consulter</h3>
-                        <p class="text-[var(--color-text-gray)] text-sm">Connectez-vous à l'heure prévue dans votre espace patient dédié et sécurisé.</p>
-                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Consultation immédiate</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Trouvez un praticien disponible rapidement, que ce soit pour une urgence ou un suivi régulier.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 4. Professionnels mis en avant -->
-    <section class="py-24 bg-gray-50 border-t border-[var(--color-border-light)]">
+    <!-- 3. Professionnels mis en avant (Sober medical style) -->
+    <section class="py-16 bg-gray-50 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-end mb-12">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-8 gap-4">
                 <div>
-                    <h2 class="text-3xl font-bold mb-4">Professionnels de santé</h2>
-                    <p class="text-lg text-[var(--color-text-gray)]">Découvrez quelques-uns de nos praticiens certifiés.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Praticiens recommandés</h2>
+                    <p class="text-gray-600">Réservez une consultation vidéo ou présentielle dès aujourd'hui.</p>
                 </div>
-                <div class="hidden sm:block">
-                    <a href="#" class="text-[var(--color-primary)] font-medium hover:text-blue-700 transition-colors">Voir tous les profils &rarr;</a>
+                <div>
+                    <a href="{{ route('professionals.index') }}" class="text-blue-600 font-semibold hover:text-blue-800 transition-colors">Voir tous les spécialistes &rarr;</a>
                 </div>
             </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Pro 1 -->
-                <x-card class="hover:shadow-md transition-shadow">
-                    <div class="flex items-start gap-4 mb-6">
-                        <img class="w-16 h-16 rounded-2xl object-cover ring-2 ring-gray-100" src="https://ui-avatars.com/api/?name=Dr+Alice+B&background=e0f2fe&color=0369a1" alt="Dr Alice B."/>
-                        <div>
-                            <h3 class="font-semibold text-lg text-[var(--color-text-dark)]">Dr. Alice Bernard</h3>
-                            <p class="text-sm text-[var(--color-text-gray)] mb-1">Psychologue Clinicienne</p>
-                            <div class="flex items-center gap-1">
-                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <span class="text-sm font-medium">4.9</span>
-                                <span class="text-xs text-gray-400">(42 avis)</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($recommendedPros as $pro)
+                    <div class="bg-white rounded-xl border border-gray-200 p-6 flex flex-col h-full hover:border-blue-300 hover:shadow-md transition-all">
+                        <div class="flex items-start gap-4 mb-4">
+                            <x-pro-avatar :user="$pro->user" size="md" />
+                            <div>
+                                <h3 class="font-bold text-lg text-blue-900">{{ str_starts_with($pro->user->name, 'Dr') ? $pro->user->name : 'Dr ' . $pro->user->name }}</h3>
+                                <p class="text-gray-600 font-medium text-sm">{{ $pro->specialty }}</p>
+                                <span class="inline-block mt-1 text-xs font-semibold text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                                    {{ $pro->hourly_rate }}€ / heure
+                                </span>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">Anxiété</span>
-                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">Dépression</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-4 border-t border-[var(--color-border-light)]">
-                        <div class="text-[var(--color-text-dark)] font-semibold">50€ <span class="text-xs text-gray-500 font-normal">/ séance</span></div>
-                        <x-button variant="secondary" class="!px-4 !py-2 text-sm !rounded-lg">Voir le profil</x-button>
-                    </div>
-                </x-card>
-                
-                <!-- Pro 2 -->
-                <x-card class="hover:shadow-md transition-shadow">
-                    <div class="flex items-start gap-4 mb-6">
-                        <img class="w-16 h-16 rounded-2xl object-cover ring-2 ring-gray-100" src="https://ui-avatars.com/api/?name=Dr+Marc+T&background=d1fae5&color=047857" alt="Dr Marc T."/>
-                        <div>
-                            <h3 class="font-semibold text-lg text-[var(--color-text-dark)]">Dr. Marc Thomas</h3>
-                            <p class="text-sm text-[var(--color-text-gray)] mb-1">Psychiatre</p>
-                            <div class="flex items-center gap-1">
-                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <span class="text-sm font-medium">4.8</span>
-                                <span class="text-xs text-gray-400">(28 avis)</span>
+                        <div class="text-sm text-gray-600 mb-6 flex-grow">
+                            <div class="flex items-start gap-2 mb-2">
+                                <svg class="w-4 h-4 text-gray-400 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                                <span class="line-clamp-2">{{ $pro->bio }}</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <svg class="w-4 h-4 text-emerald-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span class="text-emerald-700 font-medium">Disponible aujourd'hui</span>
                             </div>
                         </div>
+                        <a href="{{ route('professionals.show', $pro->id) }}" class="w-full text-center bg-blue-50 text-blue-700 font-bold py-3 rounded-lg border border-blue-100 hover:bg-blue-100 hover:border-blue-200 transition-colors">
+                            Voir le profil
+                        </a>
                     </div>
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">Burn-out</span>
-                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">Traumatismes</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-4 border-t border-[var(--color-border-light)]">
-                        <div class="text-[var(--color-text-dark)] font-semibold">65€ <span class="text-xs text-gray-500 font-normal">/ séance</span></div>
-                        <x-button variant="secondary" class="!px-4 !py-2 text-sm !rounded-lg">Voir le profil</x-button>
-                    </div>
-                </x-card>
-                
-                <!-- Pro 3 -->
-                <x-card class="hover:shadow-md transition-shadow">
-                    <div class="flex items-start gap-4 mb-6">
-                        <img class="w-16 h-16 rounded-2xl object-cover ring-2 ring-gray-100" src="https://ui-avatars.com/api/?name=Dr+Chloe+M&background=fce7f3&color=be185d" alt="Dr Chloé M."/>
-                        <div>
-                            <h3 class="font-semibold text-lg text-[var(--color-text-dark)]">Chloé Martin</h3>
-                            <p class="text-sm text-[var(--color-text-gray)] mb-1">Thérapeute TCC</p>
-                            <div class="flex items-center gap-1">
-                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <span class="text-sm font-medium">5.0</span>
-                                <span class="text-xs text-gray-400">(61 avis)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">Gestion du stress</span>
-                        <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">Sommeil</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-4 border-t border-[var(--color-border-light)]">
-                        <div class="text-[var(--color-text-dark)] font-semibold">45€ <span class="text-xs text-gray-500 font-normal">/ séance</span></div>
-                        <x-button variant="secondary" class="!px-4 !py-2 text-sm !rounded-lg">Voir le profil</x-button>
-                    </div>
-                </x-card>
+                @endforeach
+            </div>
             </div>
             
-            <div class="mt-8 text-center sm:hidden">
-                <a href="#" class="text-[var(--color-primary)] font-medium hover:text-blue-700 transition-colors">Voir tous les profils &rarr;</a>
-            </div>
         </div>
     </section>
 
-    <!-- 5. CTA Final -->
-    <section class="py-20 bg-white relative overflow-hidden text-center">
-        <div class="absolute inset-0 bg-[var(--color-primary)] opacity-5"></div>
-        <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold mb-6">Ne restez pas seul avec vos émotions</h2>
-            <p class="text-lg text-[var(--color-text-gray)] mb-8">
-                Que ce soit pour une séance ponctuelle ou un suivi régulier, trouvez l'écoute bienveillante dont vous avez besoin dès aujourd'hui.
+    <!-- 4. Section Solidarité (Functional Footer Content) -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Programme de Solidarité PsyLink</h2>
+            <p class="text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Parce que la santé mentale doit être accessible à tous, nous proposons un programme solidaire permettant l'accès à des consultations gratuites pour les personnes en situation de précarité, grâce au bénévolat de nos praticiens.
             </p>
-            <x-button variant="primary" class="!px-10 !py-4 text-lg shadow-md hover:shadow-lg transition-shadow">Commencer maintenant</x-button>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="bg-white hover:bg-gray-50 text-gray-800 font-semibold py-3 px-6 rounded-lg border border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-gray-200">
+                    Bénéficier du programme
+                </button>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg border border-transparent shadow-sm transition-all focus:ring-2 focus:ring-blue-500">
+                    Rejoindre en tant que pro
+                </button>
+            </div>
         </div>
     </section>
 </x-app-layout>

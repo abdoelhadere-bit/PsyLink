@@ -96,7 +96,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900">Dr. {{ $pro->user->name }}</div>
+                                                    <div class="text-sm font-medium text-gray-900">{{ str_starts_with($pro->user->name, 'Dr.') ? '' : 'Dr. ' }}{{ $pro->user->name }}</div>
                                                     <div class="text-sm text-gray-500">{{ $pro->specialty ?? 'Spécialité non définie' }}</div>
                                                 </div>
                                             </div>
@@ -166,7 +166,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-bold text-gray-900 border-l-2 border-red-400 pl-2">Dr. {{ $report->professional->user->name }}</div>
+                                            <div class="text-sm font-bold text-gray-900 border-l-2 border-red-400 pl-2">{{ str_starts_with($report->professional->user->name, 'Dr.') ? '' : 'Dr. ' }}{{ $report->professional->user->name }}</div>
                                             <div class="text-xs text-gray-500 pl-2">{{ $report->professional->user->email }}</div>
                                         </td>
                                         <td class="px-6 py-4">
@@ -214,7 +214,7 @@
                                 @foreach($activePros as $pro)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap flex flex-col justify-center">
-                                            <div class="text-sm font-bold text-gray-900 border-l-2 border-green-500 pl-2">Dr. {{ $pro->user->name }}</div>
+                                            <div class="text-sm font-bold text-gray-900 border-l-2 border-green-500 pl-2">{{ str_starts_with($pro->user->name, 'Dr.') ? '' : 'Dr. ' }}{{ $pro->user->name }}</div>
                                             <div class="text-sm text-gray-500 pl-2 mt-1">{{ $pro->user->email }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">

@@ -28,8 +28,24 @@
 
             @php
                 $appointments = $appointments ?? collect();
-                $featured = $appointments->filter(fn($a) => in_array($a->status, ['in_progress', 'waiting_payment']))->first();
+                $now = \Carbon\Carbon::now();
+                
+                $featured = $appointments->filter(function($a) use ($now) {
+                    $date = \Carbon\Carbon::parse($a->scheduled_at);
+                    return $date->isToday() && in_array($a->status, ['in_progress', 'waiting_payment', 'accepted']);
+                })->first();
+                if (!$featured) {
+                    $featured = $appointments->filter(fn($a) => in_array($a->status, ['in_progress', 'waiting_payment']))->first();
+                }
+
                 $otherAppointments = $appointments->filter(fn($a) => $a->id !== ($featured->id ?? null));
+
+                $featuredDate = $featured ? \Carbon\Carbon::parse($featured->scheduled_at) : null;
+                $dateLabel = $featuredDate ? ($featuredDate->isToday() ? "Aujourd'hui" : ($featuredDate->isTomorrow() ? "Demain" : "Le " . $featuredDate->format('d/m'))) : '';
+                
+                if ($featuredDate && $featuredDate->isPast() && !$featuredDate->isToday()) {
+                    $dateLabel = "Séance passée";
+                }
             @endphp
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -39,30 +55,29 @@
                     
                     <!-- Featured Action Card -->
                     @if($featured)
-                        <div class="relative overflow-hidden group">
-                            <div class="absolute inset-0 bg-blue-600/5 rounded-[2.5rem] -rotate-1 scale-105 transition-transform group-hover:rotate-0"></div>
-                            <x-card noPadding class="relative border-blue-100 shadow-[0_20px_50px_rgba(59,130,246,0.08)]">
-                                <div class="p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div class="mb-8">
+                            <x-card noPadding class="border border-blue-200 shadow-sm bg-blue-50/50">
+                                <div class="p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-8">
                                     <div class="flex items-center gap-6">
-                                        <div class="w-20 h-20 rounded-3xl bg-blue-600 text-white flex flex-col items-center justify-center shadow-lg shadow-blue-200">
+                                        <div class="w-16 h-16 rounded-xl bg-blue-600 text-white flex flex-col items-center justify-center shadow-sm">
                                             <span class="text-2xl font-black leading-none">{{ \Carbon\Carbon::parse($featured->scheduled_at)->format('d') }}</span>
                                             <span class="text-xs uppercase font-bold opacity-80 mt-1">{{ \Carbon\Carbon::parse($featured->scheduled_at)->format('M') }}</span>
                                         </div>
                                         <div>
                                             <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-600 mb-3 uppercase tracking-wider">Priorité immédiate</div>
-                                            <h3 class="text-2xl font-bold text-slate-900 mb-1 leading-tight">Séance avec Dr. {{ $featured->professional->user->name }}</h3>
-                                            <p class="text-slate-500 font-medium">Aujourd'hui à {{ \Carbon\Carbon::parse($featured->scheduled_at)->format('H:i') }} • Visio-consultation</p>
+                                            <h3 class="text-2xl font-bold text-slate-900 mb-1 leading-tight">Séance avec {{ str_starts_with($featured->professional->user->name, 'Dr.') ? '' : 'Dr. ' }}{{ $featured->professional->user->name }}</h3>
+                                            <p class="text-slate-500 font-medium">{{ $dateLabel }} à {{ \Carbon\Carbon::parse($featured->scheduled_at)->format('H:i') }} • Visio-consultation</p>
                                         </div>
                                     </div>
                                     <div>
                                         @if($featured->status === 'in_progress')
-                                            <a href="{{ route('appointments.room', $featured->id) }}" class="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all hover:scale-105 active:scale-95 group">
-                                                Rejoindre maintenant
-                                                <svg class="w-5 h-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                            <a href="{{ route('appointments.room', $featured->id) }}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors">
+                                                Rejoindre la visio
+                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                                             </a>
                                         @else
-                                            <a href="{{ route('checkout.show', $featured->id) }}" class="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold shadow-xl shadow-slate-200 hover:bg-slate-800 transition-all hover:scale-105 active:scale-95">
-                                                Régler la séance ({{ $featured->price }}€)
+                                            <a href="{{ route('checkout.show', $featured->id) }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 text-white rounded-xl font-bold hover:bg-slate-900 transition-colors">
+                                                Régler ({{ $featured->price }}€)
                                                 <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                                             </a>
                                         @endif
@@ -96,14 +111,14 @@
                         @else
                             <div class="space-y-4">
                                 @foreach($otherAppointments as $appointment)
-                                    <div class="bg-white rounded-3xl p-6 border border-slate-50 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.04)] transition-all flex flex-col sm:flex-row items-center gap-6">
-                                        <div class="w-16 h-16 rounded-2xl bg-slate-50 text-slate-600 flex flex-col items-center justify-center font-bold">
+                                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-blue-200 transition-colors flex flex-col sm:flex-row items-center gap-6">
+                                        <div class="w-14 h-14 rounded-xl bg-slate-100 text-slate-600 flex flex-col items-center justify-center font-bold">
                                             <span class="text-xl leading-none">{{ \Carbon\Carbon::parse($appointment->scheduled_at)->format('d') }}</span>
                                             <span class="text-[10px] uppercase opacity-60">{{ \Carbon\Carbon::parse($appointment->scheduled_at)->format('M') }}</span>
                                         </div>
                                         <div class="flex-grow text-center sm:text-left">
-                                            <h4 class="font-bold text-slate-900 leading-none mb-1">Dr. {{ $appointment->professional->user->name ?? 'Praticien' }}</h4>
-                                            <p class="text-sm text-slate-500 font-medium">Session {{ $appointment->type }} • {{ \Carbon\Carbon::parse($appointment->scheduled_at)->format('H\h i') }}</p>
+                                            <h4 class="font-bold text-slate-900 leading-none mb-1">{{ str_starts_with($appointment->professional->user->name ?? '', 'Dr.') ? '' : 'Dr. ' }}{{ $appointment->professional->user->name ?? 'Praticien' }}</h4>
+                                            <p class="text-sm text-slate-500 font-medium">{{ \Carbon\Carbon::parse($appointment->scheduled_at)->format('H\h i') }}</p>
                                         </div>
                                         <div class="flex items-center gap-4">
                                             @if($appointment->status === 'paid' || $appointment->status === 'accepted')
@@ -112,11 +127,15 @@
                                                 <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] uppercase font-black border border-blue-100/50">En attente</span>
                                             @elseif($appointment->status === 'completed')
                                                 <span class="px-3 py-1 bg-slate-50 text-slate-400 rounded-full text-[10px] uppercase font-black border border-slate-100/50">Terminé</span>
+                                            @elseif($appointment->status === 'waiting_payment')
+                                                <a href="{{ route('checkout.show', $appointment->id) }}" class="px-3 py-1 bg-blue-600 text-white rounded-full text-[10px] uppercase font-black hover:bg-blue-700 transition-colors">Payer {{ $appointment->price }}€</a>
                                             @else
                                                 <span class="px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-[10px] uppercase font-black">{{ $appointment->status }}</span>
                                             @endif
                                             
-                                            <span class="text-sm font-bold text-slate-900">{{ $appointment->price }}€</span>
+                                            @if($appointment->status !== 'waiting_payment')
+                                                <span class="text-sm font-bold text-slate-900">{{ $appointment->price }}€</span>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -129,25 +148,24 @@
                 <aside class="lg:col-span-4 space-y-10 sticky top-24">
                     
                     <!-- Quick Actions Card (Dark Section) -->
-                    <x-card class="!bg-slate-900 !text-white !p-8 shadow-2xl shadow-slate-200 relative overflow-hidden border-none text-white">
-                        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
-                        <h3 class="text-xl font-bold mb-4 relative z-10">Accès rapide</h3>
-                        <div class="space-y-4 relative z-10">
-                            <a href="{{ route('professionals.index') }}" class="flex items-center gap-4 p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors group">
-                                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:bg-blue-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <x-card class="bg-white p-6 shadow-sm border border-slate-200">
+                        <h3 class="text-lg font-bold text-slate-900 mb-4">Accès rapide</h3>
+                        <div class="space-y-3">
+                            <a href="{{ route('professionals.index') }}" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-colors group text-slate-700">
+                                <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                 </div>
                                 <span class="font-bold text-sm">Réserver une séance</span>
                             </a>
-                            <a href="{{ route('activities.index') }}" class="flex items-center gap-4 p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors group">
-                                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:bg-emerald-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <a href="{{ route('activities.index') }}" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-colors group text-slate-700">
+                                <div class="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                 </div>
                                 <span class="font-bold text-sm">Missions solidaires</span>
                             </a>
-                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-4 p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors group">
-                                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:bg-orange-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-colors group text-slate-700">
+                                <div class="w-8 h-8 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                                 </div>
                                 <span class="font-bold text-sm">Modifier mon profil</span>
                             </a>
@@ -156,9 +174,8 @@
 
                     <!-- Solidarity Missions Summary -->
                     <div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                              Missions Solidaires
-                             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
                         </h3>
                         @php $myActivities = $myActivities ?? collect(); @endphp
                         
@@ -169,7 +186,7 @@
                         @else
                             <div class="space-y-4">
                                 @foreach($myActivities->take(3) as $activity)
-                                    <div class="bg-white rounded-3xl p-5 border border-slate-50 shadow-sm hover:shadow-md transition-shadow">
+                                    <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                                         <div class="flex items-start justify-between gap-3 mb-2">
                                             <h4 class="font-bold text-slate-900 text-sm leading-tight">{{ $activity->title }}</h4>
                                             @if($activity->pivot->status === 'accepted')
@@ -181,8 +198,8 @@
                                             @endif
                                         </div>
                                         <div class="flex items-center justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                                            <span>📅 {{ \Carbon\Carbon::parse($activity->scheduled_at)->format('d/m') }}</span>
-                                            <span class="text-blue-500">🎁 +{{ $activity->free_sessions_earned }} crédits</span>
+                                            <span>{{ \Carbon\Carbon::parse($activity->scheduled_at)->format('d/m') }}</span>
+                                            <span class="text-blue-500">+{{ $activity->free_sessions_earned }} crédits</span>
                                         </div>
                                     </div>
                                 @endforeach
