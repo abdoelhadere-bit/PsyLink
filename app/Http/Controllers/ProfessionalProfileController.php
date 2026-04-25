@@ -49,6 +49,6 @@ class ProfessionalProfileController extends Controller
             'accepts_credits' => $request->has('accepts_credits'),
         ]);
 
-        return redirect()->route('professional.profile.edit')->with('success', 'Profil mis à jour avec succès !');
+        return redirect()->route('dashboard')->with('success', 'Profil mis à jour avec succès !');
     }
 }
