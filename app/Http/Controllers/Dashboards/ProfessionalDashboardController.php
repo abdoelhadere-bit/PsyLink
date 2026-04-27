@@ -25,11 +25,7 @@ class ProfessionalDashboardController extends Controller
         $professional = auth()->user()->professional;
 
         if ($professional->is_valid) {
-            // Si le profil est vide, rediriger vers le profil
-            if (empty($professional->specialty) || empty($professional->bio)) {
-                return redirect()->route('professional.profile.edit')
-                    ->with('success', 'Votre compte a été validé ! Complétez votre profil pour apparaître dans l\'annuaire.');
-            }
+
             return view('dashboard.professional', compact('appointments'));
         }
 

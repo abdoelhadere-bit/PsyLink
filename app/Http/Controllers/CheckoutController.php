@@ -20,7 +20,7 @@ class CheckoutController extends Controller
         }
 
         // Seul le patient concerné peut accéder au paiement
-        \Illuminate\Support\Facades\Gate::authorize('checkout', $appointment);
+        Gate::authorize('checkout', $appointment);
 
         return view('checkout.index', compact('appointment'));
     }

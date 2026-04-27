@@ -6,6 +6,8 @@
                 <p class="mt-2 text-sm text-gray-600">Complétez votre fiche pour être visible et attractif sur l'annuaire PsyLink.</p>
             </div>
 
+            <x-flash-messages />
+
             <x-card class="bg-white shadow-xl rounded-2xl border border-gray-100 overflow-hidden">
                 <div class="p-8">
                     <form method="POST" action="{{ route('professional.profile.update') }}" class="space-y-6" enctype="multipart/form-data">
